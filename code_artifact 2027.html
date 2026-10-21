@@ -1,0 +1,1732 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10261E">
+<title>أردِيفا للخدمات الزراعية | Ardeva & محاكي مصانع الأعلاف الثلاثي الأبعاد</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+:root{
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#F2F4EF; --surface:#FFFFFF; --surface2:#E8ECE5; --ink:#12231B; --muted:#56665D; --line:#D5DCD2;
+  --band:#10261E; --band-ink:#EAF1EC; --band-muted:#A9BCB1; --band-line:#2A4538; --band-up:#5BD08E; --band-down:#FF8A78;
+  --brand:#1F6A4A; --accent:#E0A936; --accent-ink:#1A1405; --up:#1E7D47; --down:#C13B2B; --focus:#1F6A4A;
+  --font-display:'Readex Pro','IBM Plex Sans Arabic',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans Arabic',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1510; --surface:#13221A; --surface2:#1B2E24; --ink:#E5EEE8; --muted:#9DB0A5; --line:#243A2E;
+    --band:#08110C; --band-ink:#EAF1EC; --band-muted:#9CB0A4; --band-line:#1F3328; --band-up:#5BD08E; --band-down:#FF8A78;
+    --brand:#58C08D; --accent:#E8B84A; --accent-ink:#1A1405; --up:#4CC27F; --down:#F0705E; --focus:#58C08D;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6}
+img{max-width:100%}
+[hidden]:not([hidden=until-found i]){display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;line-height:1.25;font-weight:600}
+p{margin:0}
+.wrap{max-width:1220px;margin-inline:auto;padding-left:16px;padding-right:16px}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.hdr{position:sticky;top:0;z-index:30;background:var(--band);color:var(--band-ink);border-bottom:1px solid var(--band-line)}
+.hdr-in{display:flex;align-items:center;gap:14px;min-height:62px;flex-wrap:wrap;padding-block:8px}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;color:inherit;min-width:0}
+.brand-name{font-family:var(--font-display);font-weight:700;font-size:19px}
+.logo{height:34px;width:auto;max-width:120px;object-fit:contain;display:block;border-radius:6px}
+.nav{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto}
+.nav button{background:none;border:0;color:var(--band-muted);padding:7px 11px;border-radius:8px;white-space:nowrap;font-size:14px;font-weight:500}
+.nav button:hover{color:var(--band-ink);background:rgba(255,255,255,.05)}
+.nav button.sim-highlight{color:var(--accent);font-weight:700;border:1px solid rgba(224,169,54,.35)}
+.hdr-act{display:flex;gap:8px;margin-inline-start:auto;align-items:center;flex-wrap:wrap}
+.chip{background:transparent;border:1px solid var(--band-line);color:var(--band-ink);padding:6px 13px;border-radius:999px;font-size:13px}
+.chip:hover{border-color:var(--band-muted)}
+.chip-solid{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.chip-danger{background:rgba(240,112,94,.18);color:#ffb4a8;border-color:rgba(240,112,94,.4)}
+
+/* Social Links Pills */
+.soc-bar{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+.soc-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;text-decoration:none;border:1px solid var(--line);background:var(--surface2);color:var(--ink);transition:transform .15s}
+.soc-pill:hover{transform:translateY(-1px)}
+.band .soc-pill{background:rgba(255,255,255,.08);color:var(--band-ink);border-color:var(--band-line)}
+.soc-fb{color:#1877F2!important}
+.soc-yt{color:#FF0000!important}
+.soc-tt{color:#00f2fe!important}
+.surface-tt{color:#111!important}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:10px;border:1px solid transparent;font-weight:600;text-decoration:none;line-height:1.3;text-align:center;transition:filter .15s}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-accent:hover{filter:brightness(1.06)}
+.btn-brand{background:var(--brand);color:#fff}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--muted)}
+.band .btn-ghost{border-color:var(--band-line);color:var(--band-ink)}
+.btn-sm{padding:6px 12px;font-size:13px}
+.danger{color:var(--down)}
+
+.band{background:var(--band);color:var(--band-ink)}
+.hero{background-size:cover;background-position:center}
+.hero-in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;padding-block:48px;align-items:start}
+.eyebrow{font-family:var(--font-mono);font-size:13px;letter-spacing:.04em;color:var(--accent);margin-bottom:12px;font-weight:600}
+.hero h1{font-size:clamp(26px,4.2vw,44px);line-height:1.2;margin-bottom:16px}
+.hero .lead{color:var(--band-muted);font-size:17px;max-width:36em;margin-bottom:24px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+.board{border:1px solid var(--band-line);background:rgba(255,255,255,.04);border-radius:14px;padding:18px;min-width:0}
+.board-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.board-head h2{font-size:18px}
+.board-head .mono{font-size:12px;color:var(--band-muted)}
+.brow{display:grid;grid-template-columns:minmax(0,1fr) 72px auto 74px;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--band-line)}
+.brow .nm b{display:block;font-weight:500}
+.brow .nm small{color:var(--band-muted);font-size:12px}
+.brow .pr{font-family:var(--font-mono);text-align:end;white-space:nowrap}
+.pill{font-family:var(--font-mono);font-size:12px;padding:3px 8px;border-radius:999px;text-align:center;background:color-mix(in srgb,currentColor 15%,transparent);white-space:nowrap}
+.band .up{color:var(--band-up)}.band .down{color:var(--band-down)}
+.up{color:var(--up)}.down{color:var(--down)}
+.spark{display:block}
+.board .note{color:var(--band-muted);font-size:13px;margin:12px 0 14px}
+
+.sec{padding-block:54px}
+.sec h2{font-size:clamp(22px,3vw,30px);margin-bottom:20px}
+.tabs{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:22px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;color:var(--muted);white-space:nowrap;font-weight:600;margin-bottom:-1px}
+.tabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:18px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.imgbox{position:relative;aspect-ratio:4/3;max-width:100%;background:var(--surface2);overflow:hidden}
+.imgbox img{width:100%;height:100%;object-fit:cover;display:block}
+.phsvg{position:absolute;inset:0;width:100%;height:100%}
+.phsvg path{fill:none;stroke:var(--brand);stroke-opacity:.3;stroke-width:1.4}
+.imgcap{position:absolute;inset-inline-start:10px;bottom:8px;font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+.pbody{padding:15px;display:flex;flex-direction:column;gap:10px;flex:1}
+.pbody h3{font-size:17px}
+.seller{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;flex-wrap:wrap}
+.tag{font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--brand)}
+.price{font-family:var(--font-mono);font-size:18px;font-weight:600;margin-top:auto;padding-top:4px}
+.price small{color:var(--muted);font-weight:400;font-size:13px}
+.pact{display:flex;gap:8px;flex-wrap:wrap}
+.pact .btn{flex:1 1 105px}
+.empty{padding:32px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center}
+
+/* Simulator Styles */
+.sim-sec{background:linear-gradient(180deg, #0d1f18 0%, #091410 100%);color:#EAF1EC;padding-block:56px;border-block:3px solid var(--accent)}
+.sim-header-box{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--band-line)}
+.sim-nav{display:flex;gap:8px;overflow-x:auto;margin-bottom:22px;padding-bottom:6px}
+.sim-nav button{background:rgba(255,255,255,.06);border:1px solid var(--band-line);color:var(--band-muted);padding:11px 18px;border-radius:10px;font-weight:600;white-space:nowrap}
+.sim-nav button.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.sim-card{background:rgba(255,255,255,.04);border:1px solid var(--band-line);border-radius:14px;padding:20px;margin-bottom:18px}
+.sim-grid-2{display:grid;grid-template-columns:380px minmax(0,1fr);gap:20px}
+.sim-slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:14px}
+.sim-slot{background:rgba(0,0,0,.35);border:2px dashed var(--band-line);border-radius:12px;padding:12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;min-height:220px;position:relative}
+.sim-slot.filled{border-style:solid;border-color:var(--band-up);background:rgba(91,208,142,.08)}
+.sim-step-badge{position:absolute;top:8px;right:8px;background:var(--accent);color:var(--accent-ink);width:24px;height:24px;border-radius:50%;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+.eq-item{display:flex;gap:10px;align-items:center;background:rgba(0,0,0,.3);border:1px solid var(--band-line);border-radius:10px;padding:10px;margin-bottom:10px}
+.eq-thumb{width:68px;height:68px;border-radius:8px;background:#10261E;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;border:1px solid var(--band-line)}
+.eq-thumb img{width:100%;height:100%;object-fit:cover}
+
+/* 3D & Schematic Diagram Container */
+.schematic-box{background:linear-gradient(180deg,#f8fafc 0%,#e2e8f0 100%);border:2px solid var(--accent);border-radius:14px;padding:14px;margin-bottom:16px;color:#0f172a;position:relative;overflow:hidden}
+.schematic-title{text-align:center;font-family:var(--font-display);font-size:clamp(18px,2.5vw,26px);font-weight:700;color:#334155;margin-bottom:8px}
+.schematic-svg{width:100%;height:auto;max-height:420px;display:block;margin:0 auto}
+.schematic-banner{background:#fff;border:1px solid #cbd5e1;border-radius:999px;padding:6px 18px;text-align:center;font-weight:700;font-size:14px;color:#0f172a;max-width:620px;margin:8px auto 0;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.canvas-3d-box{width:100%;height:340px;background:#07110c;border:1px solid var(--band-line);border-radius:12px;overflow:hidden;position:relative;margin-bottom:14px;cursor:grab}
+.canvas-3d-box:active{cursor:grabbing}
+.view-toggle-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+
+/* Raw Material Realistic Textures */
+.raw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;max-height:460px;overflow-y:auto}
+.raw-card{background:rgba(0,0,0,.35);border:1px solid var(--band-line);border-radius:10px;padding:10px;text-align:center;cursor:pointer;transition:transform .15s}
+.raw-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.raw-tex{width:48px;height:48px;border-radius:50%;margin:0 auto 6px;border:2px solid rgba(255,255,255,.25);box-shadow:inset 0 2px 5px rgba(0,0,0,.6)}
+.tex-corn{background:radial-gradient(circle,#fde047 20%,#eab308 65%,#ca8a04 100%)}
+.tex-soy{background:radial-gradient(circle,#fef08a 15%,#d6d3d1 55%,#a8a29e 95%)}
+.tex-gluten{background:linear-gradient(135deg,#f59e0b 0%,#d97706 55%,#b45309 100%)}
+.tex-sunflower{background:radial-gradient(circle,#57534e 20%,#292524 75%,#1c1917 100%)}
+.tex-bran{background:repeating-linear-gradient(45deg,#b45309,#b45309 3px,#d97706 3px,#d97706 6px)}
+.tex-barley{background:radial-gradient(circle,#f5f5f4 30%,#d6d3d1 70%,#a8a29e 100%)}
+.tex-beet{background:radial-gradient(circle,#78716c 20%,#44403c 85%)}
+.tex-date{background:radial-gradient(circle,#9a3412 20%,#7c2d12 75%,#431407 100%)}
+.tex-molasses{background:radial-gradient(circle at 30% 30%,#451a03,#1c0a00 70%,#000 100%)}
+.tex-oil{background:linear-gradient(180deg,#fef08a 0%,#facc15 100%)}
+.tex-lime{background:#f8fafc}
+.tex-premix{background:linear-gradient(45deg,#22c55e,#3b82f6,#eab308)}
+
+.sim-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+.sim-table th,.sim-table td{padding:9px;border-bottom:1px solid var(--band-line);text-align:right}
+.sim-table th{color:var(--accent);background:rgba(0,0,0,.25)}
+.sim-inp{background:#08110C;border:1px solid var(--band-line);color:#fff;padding:8px 10px;border-radius:8px;width:100%}
+.pipe-anim{height:8px;background:var(--band-line);border-radius:4px;margin-top:14px;overflow:hidden;position:relative}
+.pipe-anim.run::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 14px,var(--accent) 14px,var(--accent) 28px);animation:flowMove 1s linear infinite}
+@keyframes flowMove{from{background-position:56px 0}to{background-position:0 0}}
+.running .spin-part{animation:spin360 1.4s linear infinite;transform-origin:center}
+@keyframes spin360{100%{transform:rotate(360deg)}}
+
+.alt{background:var(--surface2)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px}
+.steps li{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:2px solid var(--brand)}
+.steps .n{font-family:var(--font-mono);font-size:13px;color:var(--brand)}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.plan.feat{border-color:var(--brand);border-width:2px}
+.plan .amt{font-family:var(--font-mono);font-size:28px;font-weight:600}
+.plan .amt small{font-size:14px;color:var(--muted);font-weight:400}
+.plan ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:14px}
+.plan li::before{content:"✓";margin-inline-end:8px;color:var(--brand);font-weight:700}
+.foot{border-top:1px solid var(--line);padding-block:28px;color:var(--muted);font-size:14px}
+.foot .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+
+/* Admin Panel & Master Save Button */
+.login-wrap{min-height:calc(100vh - 70px);display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:32px;width:100%;max-width:420px;box-shadow:0 12px 32px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:16px}
+.admin{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;padding-block:32px 72px;align-items:start}
+.anav{display:flex;flex-direction:column;gap:6px;position:sticky;top:76px}
+.anav button{background:none;border:0;text-align:start;padding:11px 14px;border-radius:8px;color:var(--muted);font-weight:600;display:flex;align-items:center;justify-content:space-between}
+.anav button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.anav .count{font-family:var(--font-mono);font-size:12px;background:var(--surface2);padding:1px 7px;border-radius:99px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.save-badge{font-size:13px;color:var(--up);display:inline-flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--up) 12%,transparent);padding:4px 12px;border-radius:999px;font-weight:600}
+.save-badge.unsaved{color:var(--accent-ink);background:var(--accent)}
+.master-save-bar{position:sticky;bottom:14px;z-index:25;background:var(--band);color:var(--band-ink);padding:14px 20px;border-radius:14px;border:2px solid var(--accent);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 10px 30px rgba(0,0,0,.35);margin-top:10px}
+.btn-save-master{background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:700;padding:12px 28px;border-radius:10px;border:0;box-shadow:0 4px 14px rgba(224,169,54,.4);transition:transform .15s,filter .15s}
+.btn-save-master:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.hint{color:var(--muted);font-size:14px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.fld{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fld>span{font-size:13px;color:var(--muted);font-weight:600}
+.fld input,.fld select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;width:100%}
+.prow{display:grid;grid-template-columns:145px minmax(0,1fr) auto;gap:16px;align-items:start;padding-top:16px;border-top:1px solid var(--line)}
+.pf{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px}
+.imgctl{display:flex;flex-direction:column;gap:8px}
+.imgctl .imgbox{border-radius:8px;border:1px solid var(--line)}
+.imgctl.wide{max-width:300px}
+.imgbtns{display:flex;gap:8px;flex-wrap:wrap}
+.rowline{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr)) auto;gap:12px;align-items:end;padding-top:14px;border-top:1px solid var(--line)}
+.seller-admin-card{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.subsec-title{font-size:16px;font-weight:700;padding-top:12px;border-top:1px solid var(--line);color:var(--brand)}
+
+/* Chat & Toast */
+.fab{position:fixed;inset-inline-end:16px;bottom:16px;z-index:40;display:flex;align-items:center;gap:8px;background:var(--brand);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.cpanel{position:fixed;inset-inline-end:16px;bottom:16px;z-index:40;width:min(360px,calc(100vw - 32px));height:min(440px,70vh);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,.28)}
+.chead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;background:var(--band);color:var(--band-ink)}
+.chead .x{background:none;border:0;color:inherit;font-size:24px;line-height:1;padding:0 6px}
+.cmsgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.msg{max-width:82%;padding:8px 12px;border-radius:12px;font-size:14px}
+.msg.s{background:var(--surface);border:1px solid var(--line);align-self:flex-start}
+.msg.me{background:var(--brand);color:#fff;align-self:flex-end}
+.cform{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--surface)}
+.cform input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;z-index:60;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+
+@media (max-width:950px){
+  .hero-in,.sim-grid-2{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .admin{grid-template-columns:minmax(0,1fr)}
+  .anav{position:static;flex-direction:row;overflow-x:auto}
+  .prow{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<div id="chat"></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+'use strict';
+var LS='ardeva-aladham-v6-3d';
+var AUTH_KEY='ardeva-admin-unlocked';
+
+var FORMULAS_DB = {
+  poultry: [
+    { name: "1. بادي تسمين دواجن اقتصادي (23% بروتين)", mix: { corn: 540, soy46: 320, gluten: 50, sunflower: 30, oil: 20, limestone: 14, dicalcium: 13, salt: 4, premix: 9 } },
+    { name: "2. نامي تسمين دواجن اقتصادي (21% بروتين)", mix: { corn: 585, soy46: 260, gluten: 60, sunflower: 35, oil: 24, limestone: 13, dicalcium: 11, salt: 4, premix: 8 } },
+    { name: "3. ناهي تسمين دواجن اقتصادي (19% بروتين)", mix: { corn: 630, soy46: 205, gluten: 70, sunflower: 35, oil: 26, limestone: 12, dicalcium: 10, salt: 4, premix: 8 } },
+    { name: "4. بياض قمة الإنتاج (18% بروتين)", mix: { corn: 560, soy46: 190, gluten: 60, sunflower: 50, bran: 20, oil: 15, limestone: 85, dicalcium: 9, salt: 4, premix: 7 } },
+    { name: "5. بياض مرحلة ثانية اقتصادي (16% بروتين)", mix: { corn: 570, soy46: 145, gluten: 60, sunflower: 60, bran: 45, oil: 10, limestone: 92, dicalcium: 7, salt: 4, premix: 7 } },
+    { name: "6. بادي كتاكيت بياض (19% بروتين)", mix: { corn: 590, soy46: 230, gluten: 50, sunflower: 40, bran: 45, oil: 5, limestone: 15, dicalcium: 13, salt: 4, premix: 8 } },
+    { name: "7. نامي بدارى بياض اقتصادي (15% بروتين)", mix: { corn: 580, soy46: 120, gluten: 60, sunflower: 60, bran: 135, oil: 5, limestone: 16, dicalcium: 12, salt: 4, premix: 8 } },
+    { name: "8. أمهات بياض إنتاجي (17% بروتين)", mix: { corn: 575, soy46: 175, gluten: 50, sunflower: 50, bran: 35, oil: 12, limestone: 82, dicalcium: 10, salt: 4, premix: 7 } },
+    { name: "9. بط تسمين اقتصادي سريع (18% بروتين)", mix: { corn: 550, soy46: 170, gluten: 80, sunflower: 60, bran: 90, oil: 10, limestone: 16, dicalcium: 12, salt: 4, premix: 8 } },
+    { name: "10. رومي نامي اقتصادي (22% بروتين)", mix: { corn: 510, soy46: 295, gluten: 60, sunflower: 40, bran: 25, oil: 25, limestone: 16, dicalcium: 16, salt: 4, premix: 9 } }
+  ],
+  cattle: [
+    { name: "1. تسمين عجول بادي (16% بروتين)", mix: { corn: 400, barley: 100, bran: 150, beetPulp: 80, soy46: 90, sunflower: 100, molasses: 40, urea: 5, limestone: 18, salt: 12, premix: 5 } },
+    { name: "2. تسمين عجول نامي اقتصادي (14% بروتين)", mix: { corn: 430, barley: 100, bran: 160, beetPulp: 90, soy46: 50, sunflower: 80, molasses: 50, urea: 8, limestone: 17, salt: 11, premix: 4 } },
+    { name: "3. تشطيب عجول طاقة عالية (13% بروتين)", mix: { corn: 520, barley: 120, bran: 100, beetPulp: 70, soy46: 30, sunflower: 70, molasses: 50, urea: 8, limestone: 18, salt: 11, premix: 3 } },
+    { name: "4. أبقار حلاب عالي الإدرار (19% بروتين)", mix: { corn: 450, barley: 100, bran: 110, beetPulp: 60, soy46: 140, sunflower: 70, molasses: 30, limestone: 18, salt: 16, premix: 6 } },
+    { name: "5. أبقار حلاب متوسط اقتصادي (16% بروتين)", mix: { corn: 380, barley: 100, bran: 170, beetPulp: 90, soy46: 70, sunflower: 100, molasses: 50, urea: 5, limestone: 18, salt: 13, premix: 4 } },
+    { name: "6. أبقار فترة الجفاف والتحضير (12% بروتين)", mix: { corn: 250, barley: 100, bran: 320, beetPulp: 150, soy46: 20, sunflower: 80, molasses: 45, limestone: 15, salt: 13, premix: 7 } },
+    { name: "7. بادي عجول رضيعة Starter (18% بروتين)", mix: { corn: 480, barley: 100, bran: 100, beetPulp: 50, soy46: 160, sunflower: 40, molasses: 40, limestone: 15, salt: 10, premix: 5 } },
+    { name: "8. عجلات تربية واستبدال (15% بروتين)", mix: { corn: 320, barley: 100, bran: 220, beetPulp: 120, soy46: 60, sunflower: 100, molasses: 45, urea: 3, limestone: 16, salt: 11, premix: 5 } },
+    { name: "9. جاموس حلاب اقتصادي (17% بروتين)", mix: { corn: 360, barley: 100, bran: 160, beetPulp: 90, soy46: 80, sunflower: 110, molasses: 55, urea: 5, limestone: 18, salt: 16, premix: 6 } },
+    { name: "10. عليقة صيانة اقتصادية للمواشي (11% بروتين)", mix: { corn: 220, barley: 80, bran: 350, beetPulp: 160, sunflower: 90, molasses: 60, urea: 8, limestone: 17, salt: 12, premix: 3 } }
+  ],
+  sheep: [
+    { name: "1. تسمين حملان بادي (17% بروتين)", mix: { barley: 250, corn: 320, bran: 120, beetPulp: 60, soy46: 130, sunflower: 50, molasses: 35, limestone: 18, salt: 11, premix: 6 } },
+    { name: "2. تسمين حملان مكثف بنوى البلح (15% بروتين)", mix: { barley: 280, corn: 300, bran: 130, beetPulp: 70, datePits: 50, soy46: 70, sunflower: 40, molasses: 30, limestone: 15, salt: 10, premix: 5 } },
+    { name: "3. تشطيب حملان وجديان اقتصادي (14% بروتين)", mix: { barley: 320, corn: 300, bran: 100, beetPulp: 60, datePits: 80, soy46: 40, sunflower: 40, molasses: 30, limestone: 15, salt: 10, premix: 5 } },
+    { name: "4. نعاج دفع غذائي Flushing (15% بروتين)", mix: { barley: 300, corn: 250, bran: 180, beetPulp: 80, datePits: 40, soy46: 50, sunflower: 40, molasses: 30, limestone: 16, salt: 6, premix: 8 } },
+    { name: "5. نعاج ثلث أخير من الحمل (16% بروتين)", mix: { barley: 280, corn: 270, bran: 150, beetPulp: 80, datePits: 30, soy46: 80, sunflower: 50, molasses: 30, limestone: 16, salt: 6, premix: 8 } },
+    { name: "6. نعاج وماعز حلاب عالي (17% بروتين)", mix: { barley: 250, corn: 300, bran: 130, beetPulp: 70, soy46: 120, sunflower: 60, molasses: 35, limestone: 18, salt: 7, premix: 10 } },
+    { name: "7. كباش وطلائق موسم التلقيح (16% بروتين)", mix: { barley: 320, corn: 250, bran: 150, beetPulp: 70, datePits: 30, soy46: 80, sunflower: 40, molasses: 30, limestone: 16, salt: 9, premix: 5 } },
+    { name: "8. حملان فطام مبكر سريعة النمو (18% بروتين)", mix: { barley: 220, corn: 380, bran: 90, beetPulp: 50, soy46: 160, sunflower: 35, molasses: 35, limestone: 16, salt: 9, premix: 5 } },
+    { name: "9. علف تكميلي اقتصادي مع الرعي (13% بروتين)", mix: { barley: 200, corn: 200, bran: 260, beetPulp: 120, datePits: 100, soy46: 20, sunflower: 40, molasses: 30, limestone: 16, salt: 9, premix: 5 } },
+    { name: "10. صيانة قطعان أغنام جافة (12% بروتين)", mix: { barley: 180, corn: 150, bran: 320, beetPulp: 140, datePits: 120, sunflower: 35, molasses: 30, limestone: 13, salt: 8, premix: 4 } }
+  ]
+};
+
+var DEF={
+  adminPass:'hanfe@@2027',
+  siteName:'Ardeva Agricultural Services',
+  siteNameAr:'أردِيفا للخدمات الزراعية',
+  tagAr:'منصة أردِيفا للخدمات الزراعية ومحاكي مصانع الأعلاف الثلاثي الأبعاد',
+  tagEn:'Ardeva Agricultural Services & 3D Feed Mill Simulator',
+  h1Ar:'سوق واحد للمعدات والخامات والمحاصيل + محاكي مصانع الأعلاف الثلاثي الأبعاد',
+  h1En:'One market for equipment, inputs & crops + 3D Feed Mill Simulator',
+  subAr:'كل شركة مسجّلة عبر الإدارة مع روابط صفحاتها الرسمية، بجانب المخطط الهندسي التفاعلي ومحاكي شركة الأدهم لتصميم مصانع الأعلاف وحساب الـ 30 تركيبة الاقتصادية.',
+  subEn:'Every company is verified by admin, featuring the interactive 3D Feed Mill Simulator & 30 economic formulas.',
+  footAr:'جميع الحقوق محفوظة — البيانات والأسعار والروابط تُدار بالكامل من لوحة الضبط.',
+  footEn:'All rights reserved — Managed via Admin Control Panel.',
+  logo:null, hero:null, lang:'ar',
+  whatsapp:'201113739996',
+  fbUrl:'https://facebook.com',
+  ytUrl:'https://youtube.com',
+  ttUrl:'https://tiktok.com',
+  webUrl:'https://maladham.com/',
+  schematicFooter:'شركة الأدهم لمعدات الأعلاف (المنوات - الجيزة) — مبيعات: 01113739996 / 01064333341',
+  elecPriceKwh:2.25,
+  laborAndBagsPerTon:350,
+  monthly:1500, yearly:15000, commission:3,
+  escrowSteps:[
+    {tAr:'المشتري يدفع للمنصة',dAr:'يُحجز المبلغ عند المنصة ولا يصل للبائع بعد.',tEn:'Buyer pays platform',dEn:'Amount is held safely in escrow.'},
+    {tAr:'الشركة تجهّز وتشحن',dAr:'يبدأ التجهيز والتصنيع بعد تأكيد حجز المبلغ.',tEn:'Seller ships order',dEn:'Preparation starts once confirmed.'},
+    {tAr:'المشتري يستلم ويؤكد',dAr:'يفحص المشتري المعدات أو الخامات ويؤكد المطابقة.',tEn:'Buyer confirms',dEn:'Buyer inspects and confirms receipt.'},
+    {tAr:'تحويل المبلغ للشركة',dAr:'يصل المبلغ للبائع بعد خصم نسبة المنصة.',tEn:'Funds released',dEn:'Seller gets paid minus commission.'}
+  ],
+  sections:[
+    {id:'equipment',ar:'معدات الأعلاف والزراعة',en:'Feed & Farm Equipment'},
+    {id:'inputs',ar:'خامات الأعلاف والمستلزمات',en:'Feed Inputs & Materials'},
+    {id:'crops',ar:'المحاصيل والحبوب',en:'Crops & Grains'}
+  ],
+  products:[
+    {id:'p1',sec:'equipment',ar:'خط إنتاج أعلاف طن ونصف متكامل (1 أو 2 تنسيب)',en:'Complete Feed Line 1.5 T/H',seller:'شركة الأدهم لمعدات الأعلاف',price:485000,img:null},
+    {id:'p2',sec:'equipment',ar:'خط إنتاج أعلاف 3 طن/ساعة متكامل',en:'Complete Feed Line 3 T/H',seller:'شركة الأدهم لمعدات الأعلاف',price:890000,img:null},
+    {id:'p3',sec:'equipment',ar:'مكبس أعلاف الأدهم 1.5 طن/ساعة (داي 250 مم)',en:'Al-Adham Pellet Mill 1.5 T/H',seller:'شركة الأدهم لمعدات الأعلاف',price:210000,img:null},
+    {id:'p4',sec:'equipment',ar:'مكبس أعلاف الأدهم 3 طن/ساعة (داي 320 مم)',en:'Al-Adham Pellet Mill 3 T/H',seller:'شركة الأدهم لمعدات الأعلاف',price:395000,img:null},
+    {id:'p5',sec:'equipment',ar:'مجرشة أعلاف الأدهم (15 / 30 / 60 حصان)',en:'Al-Adham Hammer Mill (15-60 HP)',seller:'شركة الأدهم لمعدات الأعلاف',price:85000,img:null},
+    {id:'p6',sec:'equipment',ar:'خلاط أعلاف أفقي الأدهم (72×200 / 90×300 / 120×300 سم)',en:'Al-Adham Horizontal Mixer',seller:'شركة الأدهم لمعدات الأعلاف',price:95000,img:null},
+    {id:'p7',sec:'equipment',ar:'مبرد أعلاف الأدهم المربع + مفتت وغربال راحوي',en:'Al-Adham Cooler, Crumbler & Screener',seller:'شركة الأدهم لمعدات الأعلاف',price:115000,img:null},
+    {id:'p8',sec:'inputs',ar:'جلوتين ذرة تجاري عالي البروتين (طن)',en:'Corn Gluten Meal (Ton)',seller:'مخازن الوادي للخامات',price:16500,img:null},
+    {id:'p9',sec:'inputs',ar:'كسب فول صويا 46% (طن)',en:'Soybean Meal 46% (Ton)',seller:'مخازن الوادي للخامات',price:24500,img:null},
+    {id:'p10',sec:'crops',ar:'ذرة صفراء مجروشة درجة أولى (طن)',en:'Yellow Corn (Ton)',seller:'تعاونية البحيرة',price:13500,img:null}
+  ],
+  board:[
+    {id:'b1',sec:'crops',ar:'ذرة صفراء',en:'Yellow Maize',base:13500},
+    {id:'b2',sec:'inputs',ar:'كسب صويا 46%',en:'Soybean 46%',base:24500},
+    {id:'b3',sec:'inputs',ar:'جلوتين ذرة (التجاري)',en:'Corn Gluten',base:16500},
+    {id:'b4',sec:'inputs',ar:'ردة خشنة (نخالة)',en:'Wheat Bran',base:10500},
+    {id:'b5',sec:'crops',ar:'شعير مجروش',en:'Crushed Barley',base:12800},
+    {id:'b6',sec:'inputs',ar:'تفل بنجر مجفف',en:'Beet Pulp',base:11200}
+  ],
+  sellers:[
+    {id:'s1',name:'شركة الأدهم لمعدات الأعلاف',plan:'yearly',start:'2026-09-01',fb:'https://facebook.com',yt:'https://youtube.com',tt:'https://tiktok.com',web:'https://maladham.com/'},
+    {id:'s2',name:'مخازن الوادي للخامات',plan:'yearly',start:'2026-08-01',fb:'https://facebook.com',yt:'',tt:'https://tiktok.com',web:''},
+    {id:'s3',name:'تعاونية البحيرة',plan:'monthly',start:'2026-10-01',fb:'https://facebook.com',yt:'https://youtube.com',tt:'',web:''}
+  ],
+  rawMaterials: {
+    corn:      { name: "ذرة صفراء مجروشة", price: 13500, protein: 8.5,  energy: 3350, tex: "tex-corn" },
+    soy46:     { name: "كسب فول صويا (46%)", price: 24500, protein: 46.0, energy: 2450, tex: "tex-soy" },
+    gluten:    { name: "جلوتين ذرة (التجاري)", price: 16500, protein: 28.0, energy: 2750, tex: "tex-gluten" },
+    sunflower: { name: "كسب عباد شمس / قطن (36%)", price: 14000, protein: 36.0, energy: 2100, tex: "tex-sunflower" },
+    bran:      { name: "ردة خشنة (نخالة قمح)", price: 10500, protein: 13.0, energy: 1900, tex: "tex-bran" },
+    barley:    { name: "شعير مجروش", price: 12800, protein: 11.5, energy: 2850, tex: "tex-barley" },
+    beetPulp:  { name: "تفل بنجر / قشر صويا", price: 11200, protein: 10.0, energy: 2600, tex: "tex-beet" },
+    datePits:  { name: "نوى بلح مجروش", price: 6500,  protein: 6.5,  energy: 2550, tex: "tex-date" },
+    molasses:  { name: "مولاس (عسل أسود)", price: 9000,  protein: 4.0,  energy: 2400, tex: "tex-molasses" },
+    oil:       { name: "زيت صويا نقي للطاقة", price: 48000, protein: 0.0,  energy: 8800, tex: "tex-oil" },
+    urea:      { name: "يوريا (46% نيتروجين للمجترات)", price: 15000, protein: 280.0, energy: 0, tex: "tex-lime" },
+    limestone: { name: "حجر جيري (كالسيوم)", price: 1500,  protein: 0.0,  energy: 0,    tex: "tex-lime" },
+    dicalcium: { name: "ثنائي فوسفات الكالسيوم", price: 28000, protein: 0.0,  energy: 0,    tex: "tex-lime" },
+    salt:      { name: "ملح طعام وبيكربونات", price: 4500,  protein: 0.0,  energy: 0,    tex: "tex-lime" },
+    premix:    { name: "بريمكس، أحماض، وإنزيمات", price: 65000, protein: 15.0, energy: 0,    tex: "tex-premix" }
+  },
+  simEquipment: [
+    { id: "eq_g1", step: 1, type: "grinder", name: "مجرشة أعلاف الأدهم 15 حصان + غربال استقبال ورافعة 1", cap: 1.5, kw: 11, price: 65000, img: "" },
+    { id: "eq_g2", step: 1, type: "grinder", name: "مجرشة أعلاف الأدهم 30 حصان + خزان مدشة وسيكلون", cap: 3.0, kw: 22, price: 110000, img: "" },
+    { id: "eq_g3", step: 1, type: "grinder", name: "مجرشة أعلاف الأدهم 60 حصان (إنتاجية حتى 8 طن/ساعة)", cap: 6.0, kw: 45, price: 175000, img: "" },
+    { id: "eq_m1", step: 2, type: "mixer", name: "خلاط أعلاف أفقي الأدهم 72×200 سم + خزانات وميزان تنسيب", cap: 1.5, kw: 11, price: 85000, img: "" },
+    { id: "eq_m2", step: 2, type: "mixer", name: "خلاط أعلاف أفقي الأدهم 90×300 سم + بطارية 4 خزانات تنسيب", cap: 3.0, kw: 18.5, price: 145000, img: "" },
+    { id: "eq_m3", step: 2, type: "mixer", name: "خلاط أعلاف أفقي الأدهم 120×300 سم + نظام 2 ميزان تنسيب", cap: 5.0, kw: 30, price: 210000, img: "" },
+    { id: "eq_p1", step: 3, type: "pellet", name: "مكبس أعلاف الأدهم 1.5 طن/ساعة (داي 250 مم + كونديشنر استانلس)", cap: 1.5, kw: 37, price: 210000, img: "" },
+    { id: "eq_p2", step: 3, type: "pellet", name: "مكبس أعلاف الأدهم 3 طن/ساعة (داي 320 مم + رمان بلي FAG ألماني)", cap: 3.0, kw: 75, price: 395000, img: "" },
+    { id: "eq_c1", step: 4, type: "cooler", name: "مبرد أعلاف الأدهم 100×100 سم + مفتت علف 60 سم", cap: 1.5, kw: 7.5, price: 85000, img: "" },
+    { id: "eq_c2", step: 4, type: "cooler", name: "مبرد أعلاف الأدهم 120×120 سم + مفتت علف 80 سم", cap: 3.0, kw: 11, price: 135000, img: "" },
+    { id: "eq_c3", step: 4, type: "cooler", name: "مبرد أعلاف الأدهم 160×160 سم + مفتت علف 100 سم", cap: 5.0, kw: 15, price: 185000, img: "" },
+    { id: "eq_s1", step: 5, type: "silo", name: "غربال راحوي 75×150 سم + خزان منتج نهائي وماكينة تعبئة", cap: 1.5, kw: 4, price: 75000, img: "" },
+    { id: "eq_s2", step: 5, type: "silo", name: "غربال راحوي 100×200 سم + خزان منتج نهائي وماكينة وزن أوتوماتيك", cap: 3.0, kw: 5.5, price: 115000, img: "" },
+    { id: "eq_s3", step: 5, type: "silo", name: "غربال راحوي 125×250 سم + بطارية صوامع وتعبئة أوتوماتيك", cap: 5.0, kw: 7.5, price: 165000, img: "" }
+  ]
+};
+
+var T={
+ar:{
+ nav_sections:'سوق المنتجات',nav_sim:'🏭 محاكي مصنع الأعلاف الثلاثي الأبعاد (3D)',nav_sellers:'الشركات المشتركة',nav_escrow:'الضمان',nav_plans:'الاشتراكات',
+ admin:'لوحة الضبط ⚙️',back:'معاينة المنصة 👁️',logout:'قفل اللوحة 🔒',
+ cta1:'تصفح السوق',ctaSim:'🏭 صمّم مصنع علفك الثلاثي الأبعاد (المحاكي)',cta2:'تواصل عبر واتساب',cta2off:'اضبط رقم واتساب',waMsg:'مرحباً، أتواصل معكم من منصة ',
+ board:'بورصة الأسعار الفورية',updated:'آخر تحديث',ton:'طن',cur:'ج.م',
+ boardNote:'جميع الأسعار مربوطة بلوحة الضبط وبمعمل الـ 30 تركيبة علف.',
+ secTitle:'سوق المعدات والخامات والمحاصيل',empty:'لا توجد منتجات في هذا القسم بعد. تضيفها الإدارة من لوحة الضبط.',
+ from:'السعر',buy:'اطلب بالضمان',chat:'محادثة الشركة',verified:'شركة معتمدة',photoHint:'الصورة تُرفع من لوحة الضبط',
+ escTitle:'كيف يعمل نظام الضمان في المنصة',
+ plansTitle:'باقات اشتراك الشركات والمصانع',monthly:'اشتراك شهري',yearly:'اشتراك سنوي',perMonth:'/ شهر',perYear:'/ سنة',save:'توفير',
+ commission:'نسبة عمولة المنصة على الصفقات المضمونة',plansNote:'تُضاف الشركات مع روابط صفحاتها (فيسبوك، يوتيوب، تيك توك) عبر الإدارة.',
+ f1:'عرض المنتجات والمعدات في السوق',f2:'إظهار روابط فيسبوك ويوتيوب وتيك توك للشركة',f3:'محادثة مباشرة مع المشترين',f4:'البيع عبر نظام الضمان المالي',
+ chatDemo:'محادثة مباشرة',chatPh:'اكتب رسالتك...',send:'إرسال',chatOpen:'المحادثة',chatClose:'إغلاق',
+ chatSeed:'أهلاً بحضرتك في خدمة عملاء الشركة، كيف نساعدك؟',chatReply:'تم استلام رسالتك، سيتواصل معك مسؤول المبيعات فوراً.',
+ r_price:'السعر قابل للتفاوض للكميات وخطوط الإنتاج الكاملة.',r_ship:'الشحن والتركيب متاح لجميع المحافظات والدول العربية.',r_stock:'متاح حالياً بالتسليم الفوري من المصنع.',r_pay:'الدفع متاح عبر ضمان المنصة أو التعاقد الرسمي المباشر.',
+ payDemo:'تم إرسال طلب الشراء بالضمان! سيتواصل معك فريق المنصة لتأكيد التعاقد.',
+ a_site:'اسم المنصة والروابط',a_sections:'أقسام السوق',a_products:'المنتجات والصور',a_prices:'بورصة الأسعار',a_plans:'الشركات والسوشيال ميديا',a_sim:'ضبط محاكي الأعلاف الثلاثي الأبعاد (3D)',a_sec:'كلمة السر وتطبيق الموبايل APK',
+ siteName:'اسم المنصة (إنجليزي)',siteNameAr:'اسم المنصة (عربي — يظهر في كل مكان)',tagAr:'الشعار النصي (عربي)',tagEn:'الشعار النصي (إنجليزي)',
+ h1ArLabel:'العنوان الرئيسي بالواجهة (عربي)',subArLabel:'الوصف الفرعي بالواجهة (عربي)',footArLabel:'نص الفوتر السفلي (عربي)',
+ logo:'شعار المنصة (Logo)',heroImg:'صورة خلفية الواجهة (Hero)',defLang:'اللغة الافتراضية',wa:'رقم واتساب المنصة والمبيعات (دولي بدون +)',waHint:'مثال: 201001234567',
+ fbLabel:'رابط فيسبوك',ytLabel:'رابط يوتيوب',ttLabel:'رابط تيك توك',webLabel:'رابط الموقع الرسمي',
+ upload:'رفع صورة',remove:'إزالة',add:'إضافة جديد +',del:'حذف',reset:'إعادة ضبط المصنع',resetSure:'اضغط مرة أخرى لتأكيد المسح!',
+ nameAr:'الاسم بالعربية',nameEn:'الاسم بالإنجليزية',price:'السعر (ج.م)',seller:'الشركة البائعة',section:'القسم',base:'السعر الأساسي (ج.م/طن)',
+ sellerName:'اسم الشركة المشتركة',plan:'الباقة',start:'تاريخ البدء',active:'ساري',expired:'منتهي',
+ mPrice:'الاشتراك الشهري (ج.م)',yPrice:'الاشتراك السنوي (ج.م)',comm:'نسبة عمولة المنصة (%)',
+ savedBadge:'✓ جميع البيانات محفوظة ومطبقة في المنصة',
+ unsavedBadge:'⚠️ لديك تعديلات غير محفوظة — اضغط على زر (حفظ جميع التعديلات)',
+ masterSaveBtn:'💾 حفظ جميع التعديلات وتطبيقها الآن',
+ masterSaveSuccess:'تم حفظ جميع التعديلات وتحديث المنصة بالكامل بنجاح ✓',
+ secBusy:'انقل منتجات وأسعار هذا القسم أو احذفها أولاً.',lastSec:'يلزم وجود قسم واحد على الأقل.',imgFail:'تعذّر قراءة الصورة.',saveFail:'تعذّر الحفظ، قد تكون الصورة كبيرة جداً.',
+ waNeed:'أضف رقم واتساب من لوحة الضبط أولاً.',prHint:'أي تعديل هنا يتحدث في البورصة الرئيسية عند الضغط على زر الحفظ.',
+ sellersTitle:'الشركات المشتركة وروابط صفحاتها (فيسبوك / يوتيوب / تيك توك)',planOpt_m:'شهري',planOpt_y:'سنوي',siteHint:'عدّل اسم المنصة أو الروابط أو الصور ثم اضغط على زر (حفظ جميع التعديلات) بالأسفل.',
+ loginTitle:'لوحة الضبط والتحكم المحمية',loginSub:'أدخل كلمة المرور الخاصة بك لتعديل اسم المنصة، الشركات، الروابط، والأسعار.',
+ passPh:'أدخل كلمة المرور...',loginBtn:'فتح لوحة الضبط',wrongPass:'كلمة المرور غير صحيحة!',
+ newPass:'كلمة المرور الخاصة بلوحة الضبط',
+ exportBtn:'تنزيل نسخة احتياطية كاملة (JSON)',importBtn:'استيراد ملف إعدادات',importOk:'تم استيراد جميع البيانات وحفظها بنجاح ✓',
+ escrowEditTitle:'تعديل خطوات (كيف يعمل الضمان)',stepTitleAr:'عنوان الخطوة',stepDescAr:'وصف الخطوة'
+},
+en:{
+ nav_sections:'Marketplace',nav_sim:'🏭 3D Feed Mill Simulator & 30 Formulas',nav_sellers:'Verified Companies',nav_escrow:'Escrow',nav_plans:'Plans',
+ admin:'Settings Panel ⚙️',back:'Preview Platform 👁️',logout:'Lock 🔒',
+ cta1:'Browse Market',ctaSim:'🏭 Build Your Feed Mill in 3D (Simulator)',cta2:'WhatsApp Us',cta2off:'Set WhatsApp',waMsg:'Hello, contacting you from ',
+ board:'Live Price Board',updated:'Updated',ton:'ton',cur:'EGP',
+ boardNote:'All prices are synced with the Settings Panel and Feed Simulator.',
+ secTitle:'Equipment, Feed Inputs & Crops Marketplace',empty:'No items in this section yet.',
+ from:'Price',buy:'Buy with Escrow',chat:'Chat',verified:'Verified Company',photoHint:'Uploaded via Settings',
+ escTitle:'How Platform Escrow Works',
+ plansTitle:'Company Subscription Plans',monthly:'Monthly Plan',yearly:'Yearly Plan',perMonth:'/ month',perYear:'/ year',save:'Save',
+ commission:'Platform escrow commission',plansNote:'Companies and their social links are managed by Admin.',
+ f1:'List products & feed equipment',f2:'Display Facebook, YouTube & TikTok links',f3:'Direct buyer chat',f4:'Escrow protection',
+ chatDemo:'Live Chat',chatPh:'Type message...',send:'Send',chatOpen:'Chat',chatClose:'Close',
+ chatSeed:'Welcome! How can our sales team help you today?',chatReply:'Message received, we will reply shortly.',
+ r_price:'Prices are negotiable for bulk and complete lines.',r_ship:'Shipping and installation available.',r_stock:'In stock and ready for delivery.',r_pay:'Escrow payment or official contract available.',
+ payDemo:'Escrow order sent! Our team will contact you.',
+ a_site:'Platform Name & Social Links',a_sections:'Market Sections',a_products:'Products & Photos',a_prices:'Price Board',a_plans:'Companies & Social Media',a_sim:'3D Feed Simulator Config',a_sec:'Password & Mobile APK',
+ siteName:'Platform Name (English)',siteNameAr:'Platform Name (Arabic)',tagAr:'Tagline (Arabic)',tagEn:'Tagline (English)',
+ h1ArLabel:'Hero Title (Arabic)',subArLabel:'Hero Subtitle (Arabic)',footArLabel:'Footer Text (Arabic)',
+ logo:'Platform Logo',heroImg:'Hero Banner Image',defLang:'Default Language',wa:'WhatsApp Number (no +)',waHint:'e.g. 201001234567',
+ fbLabel:'Facebook URL',ytLabel:'YouTube URL',ttLabel:'TikTok URL',webLabel:'Website URL',
+ upload:'Upload Image',remove:'Remove',add:'Add New +',del:'Delete',reset:'Factory Reset',resetSure:'Click again to confirm!',
+ nameAr:'Arabic Name',nameEn:'English Name',price:'Price (EGP)',seller:'Seller Company',section:'Section',base:'Base Price (EGP/ton)',
+ sellerName:'Company Name',plan:'Plan',start:'Start Date',active:'Active',expired:'Expired',
+ mPrice:'Monthly Plan (EGP)',yPrice:'Yearly Plan (EGP)',comm:'Commission (%)',
+ savedBadge:'✓ All changes saved & synced across the platform',
+ unsavedBadge:'⚠️ Unsaved edits — Click (Save All Changes) below',
+ masterSaveBtn:'💾 Save All Changes Now',
+ masterSaveSuccess:'All changes saved and applied across the platform ✓',
+ secBusy:'Move or delete section items first.',lastSec:'At least one section required.',imgFail:'Image read failed.',saveFail:'Storage full.',
+ waNeed:'Set WhatsApp number in Settings first.',prHint:'Updates homepage price board upon saving.',
+ sellersTitle:'Registered Companies & Social Links (FB / YT / TikTok)',planOpt_m:'Monthly',planOpt_y:'Yearly',siteHint:'Edit any field then click (Save All Changes) at the bottom.',
+ loginTitle:'Protected Settings Panel',loginSub:'Enter admin password to manage platform name, social links, companies, and simulator.',
+ passPh:'Enter password...',loginBtn:'Unlock Settings',wrongPass:'Incorrect password!',
+ newPass:'Admin Panel Password',
+ exportBtn:'Export Backup (JSON)',importBtn:'Import Backup',importOk:'Backup imported and saved ✓',
+ escrowEditTitle:'Edit Escrow Steps',stepTitleAr:'Step Title',stepDescAr:'Step Description'
+}};
+
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function load(){
+  try{
+    var r=localStorage.getItem(LS) || localStorage.getItem('ardeva-aladham-v5-3d') || localStorage.getItem('ardeva-aladham-v4');
+    if(r){
+      var parsed=JSON.parse(r);
+      var merged=Object.assign(clone(DEF),parsed);
+      merged.adminPass = parsed.adminPass && parsed.adminPass !== 'admin123' ? parsed.adminPass : 'hanfe@@2027';
+      if(!merged.siteNameAr || merged.siteNameAr==='أردِيفا - الأدهم' || merged.siteNameAr==='أردِيفا'){
+        merged.siteNameAr='أردِيفا للخدمات الزراعية';
+      }
+      if(!merged.rawMaterials){merged.rawMaterials=clone(DEF.rawMaterials);}
+      if(!merged.simEquipment || merged.simEquipment.length < 12){merged.simEquipment=clone(DEF.simEquipment);}
+      if(!merged.escrowSteps){merged.escrowSteps=clone(DEF.escrowSteps);}
+      return merged;
+    }
+  }catch(e){}
+  return clone(DEF);
+}
+
+var S=load();
+var D=clone(S);
+var U={
+  view:'home',
+  unlocked: sessionStorage.getItem(AUTH_KEY)==='1',
+  dirty:false,
+  sel:null,
+  atab:'site',
+  chat:{open:false,withId:null},
+  msgs:[],
+  resetAsk:false,
+  simTab:'line',
+  visualMode:'both',
+  factoryName:'مصنع البركة للأعلاف',
+  budgetTier:850000,
+  eqFilter:'all',
+  selectedLine:{1:null,2:null,3:null,4:null,5:null},
+  formulaCat:'poultry',
+  formulaIdx:0,
+  formulaMix:{},
+  formulaTitle:'',
+  simRunning:false,
+  hoursPerDay:10,
+  daysPerMonth:26,
+  marginPerTon:1200
+};
+
+function sellerActive(s){
+  var d=new Date(s.start);if(isNaN(d.getTime())){return false;}
+  if(s.plan==='yearly'){d.setFullYear(d.getFullYear()+1);}else{d.setMonth(d.getMonth()+1);}
+  return d.getTime()>Date.now();
+}
+
+function initSimDefaults(){
+  for(var step=1;step<=5;step++){
+    if(!U.selectedLine[step]){
+      U.selectedLine[step]=S.simEquipment.find(function(e){return e.step===step;})||null;
+    }
+  }
+  loadSimFormula('poultry',0);
+}
+function loadSimFormula(cat,idx){
+  U.formulaCat=cat;
+  U.formulaIdx=idx;
+  var f=FORMULAS_DB[cat][idx];
+  U.formulaTitle=f.name;
+  U.formulaMix=clone(f.mix);
+}
+initSimDefaults();
+
+function tr(k){return (T[S.lang]&&T[S.lang][k])||T.ar[k]||k;}
+function loc(o){return o[S.lang]||o.ar;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function fmt(n){return Number(n||0).toLocaleString('en-US');}
+function setPath(o,p,v){var k=p.split('.'),t=o;for(var i=0;i<k.length-1;i++){t=t[k[i]];}t[k[k.length-1]]=v;}
+function uid(){return 'x'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);}
+function secName(id){var s=S.sections.filter(function(x){return x.id===id;})[0];return s?loc(s):'';}
+var tt=null;
+function toast(msg){var el=document.getElementById('toast');if(!el){return;}el.textContent=msg;el.hidden=false;clearTimeout(tt);tt=setTimeout(function(){el.hidden=true;},3400);}
+
+function syncHeaderDOM(){
+  var nm=S.lang==='ar'?(S.siteNameAr||S.siteName):S.siteName;
+  document.title = nm + ' | ' + (S.lang==='ar'?S.tagAr:S.tagEn);
+  var bName=document.querySelector('.brand-name');
+  if(bName){bName.textContent=nm;}
+}
+
+function save(){
+  try{
+    localStorage.setItem(LS,JSON.stringify(S));
+    syncHeaderDOM();
+  }catch(e){
+    toast(tr('saveFail'));
+  }
+}
+
+function saveAllAdminChanges(){
+  var np=document.getElementById('newAdminPassInp');
+  if(np&&np.value.trim()){
+    D.adminPass=np.value.trim();
+  }
+  S=clone(D);
+  U.dirty=false;
+  for(var step=1;step<=5;step++){
+    if(U.selectedLine[step]){
+      var updatedEq=S.simEquipment.find(function(x){return x.id===U.selectedLine[step].id;});
+      if(updatedEq){U.selectedLine[step]=updatedEq;}
+    }
+  }
+  save();
+  render();
+  toast(tr('masterSaveSuccess'));
+}
+
+function markDirty(){
+  U.dirty=true;
+  var badges=document.querySelectorAll('.save-badge');
+  badges.forEach(function(b){
+    b.textContent=tr('unsavedBadge');
+    b.classList.add('unsaved');
+  });
+}
+
+function socialLinksHTML(obj,isBand){
+  var fb=obj.fb||obj.fbUrl||'';
+  var yt=obj.yt||obj.ytUrl||'';
+  var ttUrl=obj.tt||obj.ttUrl||'';
+  var web=obj.web||obj.webUrl||'';
+  var out=[];
+  if(fb){out.push('<a class="soc-pill soc-fb" href="'+esc(fb)+'" target="_blank" rel="noopener">📘 فيسبوك</a>');}
+  if(yt){out.push('<a class="soc-pill soc-yt" href="'+esc(yt)+'" target="_blank" rel="noopener">▶️ يوتيوب</a>');}
+  if(ttUrl){out.push('<a class="soc-pill '+(isBand?'soc-tt':'surface-tt')+'" href="'+esc(ttUrl)+'" target="_blank" rel="noopener">🎵 تيك توك</a>');}
+  if(web){out.push('<a class="soc-pill" href="'+esc(web)+'" target="_blank" rel="noopener">🌐 الموقع</a>');}
+  return out.length?'<div class="soc-bar">'+out.join('')+'</div>':'';
+}
+
+function readImg(file,max,mime,cb){
+  var fr=new FileReader();
+  fr.onload=function(){
+    var im=new Image();
+    im.onload=function(){
+      var k=Math.min(1,max/Math.max(im.width,im.height));
+      var c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      cb(c.toDataURL(mime,0.82));
+    };
+    im.onerror=function(){toast(tr('imgFail'));};
+    im.src=fr.result;
+  };
+  fr.onerror=function(){toast(tr('imgFail'));};
+  fr.readAsDataURL(file);
+}
+function ph(seed){
+  var s=0,str=String(seed),p='',i,x;
+  for(i=0;i<str.length;i++){s=(s*31+str.charCodeAt(i))%997;}
+  for(i=0;i<9;i++){
+    var y=30+i*26,a=10+((s+i*7)%14),f=((s+i*13)%628)/100,d='M0 '+y;
+    for(x=0;x<=400;x+=20){d+=' L'+x+' '+(y+Math.sin(x/60+f+i*0.5)*a).toFixed(1);}
+    p+='<path fill="none" d="'+d+'"/>';
+  }
+  return '<svg class="phsvg" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+p+'</svg>';
+}
+function imgBox(src,seed,cap){
+  return '<div class="imgbox">'+(src?'<img src="'+esc(src)+'" alt="">':ph(seed)+(cap?'<span class="imgcap">'+esc(tr('photoHint'))+'</span>':''))+'</div>';
+}
+
+function series(i,base){
+  var h=Math.floor(Date.now()/3.6e6),out=[],k;
+  for(k=11;k>=0;k--){var t=h-k;out.push(Math.round(base*(1+0.018*Math.sin(t*0.9+i*1.7)+0.009*Math.sin(t*2.3+i*0.6))/10)*10);}
+  out[out.length-1]=Number(base)||0;
+  return out;
+}
+function spark(v){
+  var mn=Math.min.apply(null,v),mx=Math.max.apply(null,v),w=72,h=24,rng=(mx-mn)||1;
+  var pts=v.map(function(y,i){return [(i/(v.length-1)*(w-4)+2).toFixed(1),(h-3-((y-mn)/rng)*(h-6)).toFixed(1)];});
+  var last=pts[pts.length-1];
+  return '<svg class="spark" viewBox="0 0 72 24" width="72" height="24" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" points="'+pts.map(function(p){return p.join(',');}).join(' ')+'"/><circle cx="'+last[0]+'" cy="'+last[1]+'" r="2.4" fill="currentColor"/></svg>';
+}
+function hourLabel(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':00';}
+
+function renderSchematicDiagramSVG(){
+  var s1=U.selectedLine[1], s2=U.selectedLine[2], s3=U.selectedLine[3], s4=U.selectedLine[4], s5=U.selectedLine[5];
+  var op1=s1?'1':'0.3', op2=s2?'1':'0.3', op3=s3?'1':'0.3', op4=s4?'1':'0.3', op5=s5?'1':'0.3';
+  var animClass = U.simRunning ? 'run-flow' : '';
+  return '<div class="schematic-box">'+
+    '<div class="schematic-title">مخطط توضيحي لمصنع أعلاف متكامل ('+esc(U.factoryName)+')</div>'+
+    '<svg class="schematic-svg" viewBox="0 0 1200 500" dir="rtl" xmlns="http://www.w3.org/2000/svg">'+
+      '<defs>'+
+        '<linearGradient id="blueTank" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2b546a"/><stop offset="50%" stop-color="#53839c"/><stop offset="100%" stop-color="#24475a"/></linearGradient>'+
+        '<linearGradient id="yellowMac" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#b47d12"/><stop offset="50%" stop-color="#eab308"/><stop offset="100%" stop-color="#a16207"/></linearGradient>'+
+        '<linearGradient id="greenElev" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2d5a3c"/><stop offset="50%" stop-color="#478559"/><stop offset="100%" stop-color="#1e3f29"/></linearGradient>'+
+        '<linearGradient id="steelFrame" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#94a3b8"/><stop offset="100%" stop-color="#475569"/></linearGradient>'+
+      '</defs>'+
+      /* Ground Line */
+      '<rect x="20" y="465" width="1160" height="8" rx="4" fill="#cbd5e1"/>'+
+
+      /* STAGE 1 (Rightmost): Receiving, Elevator 1, Yellow Crusher Tank & Hammer Mill */
+      '<g opacity="'+op1+'">'+
+        /* Intake Hopper & Elevator 1 */
+        '<polygon points="1130,415 1175,415 1162,450 1143,450" fill="url(#blueTank)"/>'+
+        '<rect x="1115" y="195" width="22" height="270" fill="url(#greenElev)"/>'+
+        '<polygon points="1105,175 1145,175 1138,195 1112,195" fill="url(#greenElev)"/>'+
+        '<text x="1165" y="390" font-size="16" font-weight="bold" fill="#1e293b" text-anchor="middle">رافعة 1</text>'+
+        '<text x="1165" y="410" font-size="15" font-weight="bold" fill="#1e293b" text-anchor="middle">غربال استقبال</text>'+
+        /* Yellow Crusher Tank (خزان مدشة) */
+        '<rect x="995" y="215" width="105" height="90" fill="url(#yellowMac)" stroke="#713f12"/>'+
+        '<polygon points="995,305 1047,355 1047,305" fill="url(#yellowMac)"/>'+
+        '<polygon points="1047,305 1100,305 1055,355" fill="url(#yellowMac)"/>'+
+        '<rect x="995" y="305" width="105" height="160" fill="none" stroke="#64748b" stroke-width="5"/>'+
+        '<text x="1047" y="185" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">خزان</text>'+
+        '<text x="1047" y="205" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">مدشة</text>'+
+        /* Hammer Mill (مدشة) */
+        '<polygon points="985,355 1020,355 1012,385 993,385" fill="url(#yellowMac)"/>'+
+        '<rect x="980" y="385" width="42" height="42" rx="4" fill="#f8fafc" stroke="#475569" stroke-width="2"/>'+
+        '<polygon points="975,432 1030,432 1018,465 987,465" fill="url(#blueTank)"/>'+
+        '<text x="1055" y="415" font-size="20" font-weight="bold" fill="#1e293b" text-anchor="middle">مدشة</text>'+
+        /* Tall Elevator 2 feeding Batching Silos */
+        '<rect x="935" y="75" width="28" height="390" fill="url(#greenElev)"/>'+
+        '<polygon points="920,50 975,50 968,75 928,75" fill="url(#greenElev)"/>'+
+        '<text x="995" y="135" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">رافعة 2</text>'+
+      '</g>'+
+
+      /* STAGE 2 (Middle-Right): 4 Blue Batching Tanks & Batching Scale + Sifter */
+      '<g opacity="'+op2+'">'+
+        /* Top Conveyor (نواقل) */
+        '<rect x="695" y="92" width="240" height="14" fill="url(#steelFrame)"/>'+
+        '<text x="815" y="82" font-size="20" font-weight="bold" fill="#1e293b" text-anchor="middle">نواقل</text>'+
+        /* 4 Blue Corrugated Batching Silos (خزانات تنسيب) */
+        '<g>'+
+          '<rect x="685" y="115" width="52" height="150" rx="4" fill="url(#blueTank)" stroke="#cbd5e1"/>'+
+          '<polygon points="685,265 737,265 716,320 706,320" fill="url(#blueTank)"/>'+
+          '<rect x="740" y="115" width="52" height="150" rx="4" fill="url(#blueTank)" stroke="#cbd5e1"/>'+
+          '<polygon points="740,265 792,265 771,320 761,320" fill="url(#blueTank)"/>'+
+          '<rect x="795" y="115" width="52" height="150" rx="4" fill="url(#blueTank)" stroke="#cbd5e1"/>'+
+          '<polygon points="795,265 847,265 826,320 816,320" fill="url(#blueTank)"/>'+
+          '<rect x="850" y="115" width="52" height="150" rx="4" fill="url(#blueTank)" stroke="#cbd5e1"/>'+
+          '<polygon points="850,265 902,265 881,320 871,320" fill="url(#blueTank)"/>'+
+          '<text x="795" y="210" font-size="23" font-weight="bold" fill="#ffffff" stroke="#0f172a" stroke-width="0.8" text-anchor="middle">خزانات تنسيب</text>'+
+        '</g>'+
+        /* Steel Structure holding batching silos */
+        '<rect x="675" y="265" width="235" height="8" fill="#64748b"/>'+
+        '<line x1="680" y1="265" x2="680" y2="465" stroke="#64748b" stroke-width="6"/>'+
+        '<line x1="905" y1="265" x2="905" y2="465" stroke="#64748b" stroke-width="6"/>'+
+        /* Batching Scale Hopper (ميزان تنسيب) */
+        '<polygon points="675,335 865,335 835,405 705,405" fill="url(#blueTank)" stroke="#1e293b"/>'+
+        '<rect x="675" y="335" width="190" height="130" fill="none" stroke="#475569" stroke-width="4"/>'+
+        '<text x="770" y="428" font-size="20" font-weight="bold" fill="#1e293b" text-anchor="middle">ميزان تنسيب</text>'+
+        /* Impurity Sifter (غربال فصل شوائب) */
+        '<polygon points="605,395 668,385 668,415 605,425" fill="url(#blueTank)"/>'+
+        '<text x="635" y="345" font-size="16" font-weight="bold" fill="#1e293b" text-anchor="middle">غربال</text>'+
+        '<text x="635" y="365" font-size="16" font-weight="bold" fill="#1e293b" text-anchor="middle">فصل شوائب</text>'+
+      '</g>'+
+
+      /* STAGE 3 (Center): Elevator 3, Upper Hopper, White Horizontal Mixer & Lower Hopper */
+      '<g opacity="'+op3+'">'+
+        /* Elevator 3 */
+        '<rect x="572" y="165" width="25" height="300" fill="url(#greenElev)"/>'+
+        '<polygon points="560,145 605,145 598,165 568,165" fill="url(#greenElev)"/>'+
+        '<text x="625" y="245" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">رافعة 3</text>'+
+        /* Pipe from Elevator 3 to Mixer Tank */
+        '<line x1="572" y1="175" x2="505" y2="235" stroke="#64748b" stroke-width="8"/>'+
+        /* Upper Hopper (خزان) */
+        '<polygon points="450,230 545,230 515,280 480,280" fill="url(#blueTank)"/>'+
+        '<text x="545" y="270" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">خزان</text>'+
+        /* Horizontal White Feed Mixer (خلاط علف) */
+        '<rect x="440" y="280" width="115" height="62" rx="18" fill="#f8fafc" stroke="#94a3b8" stroke-width="3"/>'+
+        '<text x="497" y="317" font-size="19" font-weight="bold" fill="#0f172a" text-anchor="middle">خلاط علف</text>'+
+        /* Lower Surge Hopper (خزان) & Conveyors */
+        '<rect x="430" y="345" width="135" height="120" fill="none" stroke="#64748b" stroke-width="5"/>'+
+        '<polygon points="445,350 545,350 505,405 485,405" fill="url(#blueTank)"/>'+
+        '<text x="535" y="400" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">خزان</text>'+
+        '<rect x="425" y="405" width="75" height="10" fill="url(#steelFrame)"/>'+
+        '<text x="460" y="432" font-size="16" font-weight="bold" fill="#1e293b" text-anchor="middle">نواقل</text>'+
+      '</g>'+
+
+      /* STAGE 4 (Middle-Left): Elevator 4, Pellet Tank, Pellet Mill, Yellow Cooler & Crumbler */
+      '<g opacity="'+op4+'">'+
+        /* Elevator 4 */
+        '<rect x="395" y="130" width="24" height="335" fill="url(#greenElev)"/>'+
+        '<polygon points="385,110 428,110 422,130 390,130" fill="url(#greenElev)"/>'+
+        '<text x="455" y="155" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">رافعة 4</text>'+
+        /* Pellet Mill Tank (خزان مكبس) */
+        '<rect x="315" y="160" width="70" height="65" fill="url(#blueTank)"/>'+
+        '<polygon points="315,225 385,225 360,270 340,270" fill="url(#blueTank)"/>'+
+        '<text x="350" y="190" font-size="17" font-weight="bold" fill="#ffffff" text-anchor="middle">خزان</text>'+
+        '<text x="350" y="212" font-size="17" font-weight="bold" fill="#ffffff" text-anchor="middle">مكبس</text>'+
+        /* Pellet Mill (مكبس علف) */
+        '<rect x="295" y="265" width="100" height="80" fill="none" stroke="#64748b" stroke-width="5"/>'+
+        '<rect x="315" y="275" width="65" height="22" rx="6" fill="#e2e8f0" stroke="#ca8a04" stroke-width="2"/>'+
+        '<rect x="310" y="300" width="72" height="38" rx="4" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>'+
+        '<text x="346" y="316" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">مكبس علف</text>'+
+        /* Yellow Counterflow Cooler (مبرد علف) & Crumbler (مفتت علف) */
+        '<rect x="308" y="352" width="64" height="58" fill="url(#yellowMac)" stroke="#713f12"/>'+
+        '<polygon points="308,410 372,410 355,432 325,432" fill="url(#yellowMac)"/>'+
+        '<rect x="312" y="432" width="56" height="22" fill="#94a3b8" stroke="#334155"/>'+
+        '<text x="282" y="385" font-size="15" font-weight="bold" fill="#1e293b" text-anchor="middle">مبرد</text>'+
+        '<text x="282" y="402" font-size="15" font-weight="bold" fill="#1e293b" text-anchor="middle">علف</text>'+
+        '<text x="282" y="442" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle">مفتت علف</text>'+
+      '</g>'+
+
+      /* STAGE 5 (Leftmost): Elevator 5, Green Sifter, Final Product Silo & Packing Scale */
+      '<g opacity="'+op5+'">'+
+        /* Elevator 5 */
+        '<rect x="255" y="135" width="24" height="330" fill="url(#greenElev)"/>'+
+        '<polygon points="245,115 288,115 282,135 250,135" fill="url(#greenElev)"/>'+
+        '<text x="312" y="135" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">رافعة 5</text>'+
+        /* Green Rotary Screener (غربال) */
+        '<line x1="255" y1="150" x2="195" y2="195" stroke="#64748b" stroke-width="7"/>'+
+        '<rect x="140" y="175" width="75" height="28" fill="url(#greenElev)"/>'+
+        '<polygon points="140,203 215,203 195,232 160,232" fill="url(#greenElev)"/>'+
+        '<text x="177" y="165" font-size="18" font-weight="bold" fill="#1e293b" text-anchor="middle">غربال</text>'+
+        '<text x="177" y="195" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">غربال</text>'+
+        /* Final Product Tank (خزان منتج نهائي) */
+        '<rect x="130" y="238" width="95" height="90" fill="url(#blueTank)" stroke="#1e293b"/>'+
+        '<polygon points="130,328 225,328 192,385 162,385" fill="url(#blueTank)"/>'+
+        '<text x="177" y="270" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">خزان</text>'+
+        '<text x="177" y="292" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">منتج</text>'+
+        '<text x="177" y="314" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">نهائي</text>'+
+        /* Steel Stand & Packing Machine (ماكينة وزن وتعبئة) */
+        '<line x1="125" y1="330" x2="125" y2="465" stroke="#64748b" stroke-width="5"/>'+
+        '<line x1="230" y1="330" x2="230" y2="465" stroke="#64748b" stroke-width="5"/>'+
+        '<rect x="155" y="385" width="45" height="35" fill="url(#blueTank)"/>'+
+        '<rect x="145" y="420" width="65" height="45" fill="none" stroke="#eab308" stroke-width="4"/>'+
+        '<text x="208" y="395" font-size="15" font-weight="bold" fill="#1e293b" text-anchor="middle">ماكينة</text>'+
+        '<text x="208" y="413" font-size="15" font-weight="bold" fill="#1e293b" text-anchor="middle">وزن</text>'+
+        '<text x="208" y="431" font-size="15" font-weight="bold" fill="#1e293b" text-anchor="middle">وتعبئة</text>'+
+      '</g>'+
+    '</svg>'+
+    '<div class="schematic-banner">'+esc(S.schematicFooter||DEF.schematicFooter)+'</div>'+
+  '</div>';
+}
+
+/* Three.js 3D Factory Simulation matching the exact 5-stage schematic */
+var threeScene=null, threeRenderer=null, threeAnimId=null, threeMeshes=[];
+function init3DCanvas(containerId){
+  var container = document.getElementById(containerId);
+  if(!container || typeof THREE === 'undefined') return;
+  if(threeAnimId) cancelAnimationFrame(threeAnimId);
+  container.innerHTML = '';
+
+  var width = container.clientWidth || 700;
+  var height = container.clientHeight || 340;
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0b1510);
+
+  var camera = new THREE.PerspectiveCamera(42, width/height, 0.1, 1000);
+  var camAngle = 0, camHeight = 7.5, camRadius = 22;
+  function updateCam(){
+    camera.position.x = Math.sin(camAngle) * camRadius;
+    camera.position.z = Math.cos(camAngle) * camRadius;
+    camera.position.y = camHeight;
+    camera.lookAt(0, 3.2, 0);
+  }
+  updateCam();
+
+  var renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(width, height);
+  container.appendChild(renderer.domElement);
+
+  /* Mouse & Touch Orbit Controls */
+  var isDragging = false, prevX = 0, prevY = 0;
+  container.onmousedown = function(ev){ isDragging=true; prevX=ev.clientX; prevY=ev.clientY; };
+  window.addEventListener('mouseup', function(){ isDragging=false; });
+  container.onmousemove = function(ev){
+    if(!isDragging) return;
+    camAngle -= (ev.clientX - prevX) * 0.008;
+    camHeight = Math.max(2, Math.min(16, camHeight + (ev.clientY - prevY) * 0.03));
+    prevX = ev.clientX; prevY = ev.clientY;
+    updateCam();
+  };
+
+  /* Lighting */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+  var dirLight = new THREE.DirectionalLight(0xfff4d6, 1.1);
+  dirLight.position.set(12, 24, 16);
+  scene.add(dirLight);
+
+  /* Factory Floor */
+  var floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(30, 12),
+    new THREE.MeshStandardMaterial({color: 0x162920, roughness: 0.85})
+  );
+  floor.rotation.x = -Math.PI / 2;
+  scene.add(floor);
+
+  var matGreen = new THREE.MeshStandardMaterial({color: 0x3b7a4c, metalness: 0.3});
+  var matBlue  = new THREE.MeshStandardMaterial({color: 0x3b6e8c, metalness: 0.4, roughness: 0.4});
+  var matYellow= new THREE.MeshStandardMaterial({color: 0xeab308, metalness: 0.3});
+  var matWhite = new THREE.MeshStandardMaterial({color: 0xf1f5f9, metalness: 0.2});
+  var matSteel = new THREE.MeshStandardMaterial({color: 0x64748b, metalness: 0.6});
+
+  threeMeshes = [];
+
+  function addElevator(parent, x, h){
+    var leg = new THREE.Mesh(new THREE.BoxGeometry(0.38, h, 0.38), matGreen);
+    leg.position.set(x, h/2, 0);
+    parent.add(leg);
+    var head = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.5, 0.5), matGreen);
+    head.position.set(x, h + 0.2, 0);
+    parent.add(head);
+  }
+
+  /* Stage 1 (Right: x = +8): Elevator 1 + Yellow Crusher Tank + White Hammer Mill + Tall Elevator 2 */
+  if(U.selectedLine[1]){
+    var g1 = new THREE.Group();
+    addElevator(g1, 9.2, 5.2);
+    var yTank = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.6, 1.4), matYellow);
+    yTank.position.set(7.8, 3.8, 0);
+    g1.add(yTank);
+    var mill = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.9, 0.9), matWhite);
+    mill.position.set(7.5, 1.2, 0);
+    g1.add(mill);
+    addElevator(g1, 6.2, 7.6);
+    scene.add(g1);
+    threeMeshes.push(mill);
+  }
+
+  /* Stage 2 (Middle-Right: x = +3.2): 4 Blue Batching Silos + Scale Hopper */
+  if(U.selectedLine[2]){
+    var g2 = new THREE.Group();
+    for(var b=0; b<4; b++){
+      var bx = 2.0 + b*0.95;
+      var cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 2.5, 20), matBlue);
+      cyl.position.set(bx, 5.0, 0);
+      g2.add(cyl);
+      var cone = new THREE.Mesh(new THREE.ConeGeometry(0.42, 0.8, 20), matBlue);
+      cone.rotation.x = Math.PI;
+      cone.position.set(bx, 3.35, 0);
+      g2.add(cone);
+    }
+    var scaleBox = new THREE.Mesh(new THREE.ConeGeometry(1.5, 1.2, 4), matBlue);
+    scaleBox.rotation.x = Math.PI;
+    scaleBox.rotation.y = Math.PI/4;
+    scaleBox.position.set(3.4, 1.8, 0);
+    g2.add(scaleBox);
+    scene.add(g2);
+    threeMeshes.push(scaleBox);
+  }
+
+  /* Stage 3 (Center: x = -0.8): Elevator 3 + White Horizontal Mixer + Hoppers */
+  if(U.selectedLine[3] || U.selectedLine[2]){
+    var g3 = new THREE.Group();
+    addElevator(g3, 0.6, 6.0);
+    var hMixer = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.65, 1.9, 20), matWhite);
+    hMixer.rotation.z = Math.PI / 2;
+    hMixer.position.set(-0.9, 3.2, 0);
+    g3.add(hMixer);
+    var topHopper = new THREE.Mesh(new THREE.ConeGeometry(0.8, 0.9, 4), matBlue);
+    topHopper.rotation.x = Math.PI;
+    topHopper.rotation.y = Math.PI/4;
+    topHopper.position.set(-0.9, 4.3, 0);
+    g3.add(topHopper);
+    scene.add(g3);
+    threeMeshes.push(hMixer);
+  }
+
+  /* Stage 4 (Middle-Left: x = -4.2): Elevator 4 + Pellet Tank + Pellet Mill + Yellow Cooler */
+  if(U.selectedLine[3] || U.selectedLine[4]){
+    var g4 = new THREE.Group();
+    addElevator(g4, -2.6, 6.6);
+    var pTank = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.2, 1.5, 16), matBlue);
+    pTank.position.set(-4.2, 5.2, 0);
+    g4.add(pTank);
+    var pMill = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.9, 1.1), matBlue);
+    pMill.position.set(-4.2, 3.5, 0);
+    g4.add(pMill);
+    var yCooler = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.3, 1.1), matYellow);
+    yCooler.position.set(-4.2, 1.8, 0);
+    g4.add(yCooler);
+    scene.add(g4);
+    threeMeshes.push(pMill);
+  }
+
+  /* Stage 5 (Leftmost: x = -7.8): Elevator 5 + Green Sifter + Final Blue Silo + Packing */
+  if(U.selectedLine[5]){
+    var g5 = new THREE.Group();
+    addElevator(g5, -5.8, 6.5);
+    var sifter = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.65, 1.1), matGreen);
+    sifter.position.set(-7.8, 5.4, 0);
+    g5.add(sifter);
+    var fTank = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.8, 1.5), matBlue);
+    fTank.position.set(-7.8, 3.6, 0);
+    g5.add(fTank);
+    var fPack = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.1, 0.9), matYellow);
+    fPack.position.set(-7.8, 1.0, 0);
+    g5.add(fPack);
+    scene.add(g5);
+    threeMeshes.push(sifter);
+  }
+
+  function animate3D(){
+    threeAnimId = requestAnimationFrame(animate3D);
+    if(U.simRunning){
+      threeMeshes.forEach(function(m, idx){
+        m.position.y += Math.sin(Date.now()*0.01 + idx)*0.003;
+      });
+    }
+    renderer.render(scene, camera);
+  }
+  animate3D();
+}
+
+var MARK='<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#E0A936"/><path d="M7 24 L16 7 L25 24 M11 18.5 H21" fill="none" stroke="#10261E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function header(){
+  var logo=S.logo?'<img class="logo" src="'+esc(S.logo)+'" alt="">':MARK;
+  var nm=S.lang==='ar'?(S.siteNameAr||S.siteName):S.siteName;
+  var nav=U.view==='home'?'<nav class="nav">'+
+    '<button data-a="scroll" data-id="simulator" class="sim-highlight">'+tr('nav_sim')+'</button>'+
+    '<button data-a="scroll" data-id="sections">'+tr('nav_sections')+'</button>'+
+    '<button data-a="scroll" data-id="sellers-sec">'+tr('nav_sellers')+'</button>'+
+    '<button data-a="scroll" data-id="escrow">'+tr('nav_escrow')+'</button>'+
+    '<button data-a="scroll" data-id="plans">'+tr('nav_plans')+'</button>'+
+    '</nav>':'<nav class="nav"></nav>';
+  var lockBtn=(U.view==='admin'&&U.unlocked)?'<button class="chip chip-danger" data-a="logout">'+tr('logout')+'</button>':'';
+  return '<header class="hdr"><div class="wrap hdr-in"><button class="brand" data-a="home">'+logo+'<span class="brand-name">'+esc(nm)+'</span></button>'+nav+
+    '<div class="hdr-act">'+lockBtn+'<button class="chip" data-a="lang">'+(S.lang==='ar'?'EN':'عربي')+'</button><button class="chip chip-solid" data-a="admin">'+(U.view==='admin'?tr('back'):tr('admin'))+'</button></div></div></header>';
+}
+
+function waButton(){
+  var n=String(S.whatsapp||'').replace(/\D/g,'');
+  var siteNm=S.lang==='ar'?(S.siteNameAr||S.siteName):S.siteName;
+  if(n){return '<a class="btn btn-accent" href="https://wa.me/'+n+'?text='+encodeURIComponent(tr('waMsg')+siteNm)+'" target="_blank" rel="noopener">📲 '+tr('cta2')+'</a>';}
+  return '<button class="btn btn-accent" data-a="waSetup">'+tr('cta2off')+'</button>';
+}
+
+function boardHTML(){
+  var rows=S.board.map(function(b,i){
+    var v=series(i,b.base),last=v[v.length-1],prev=v[v.length-2]||1,ch=(last-prev)/prev*100,up=ch>=0;
+    return '<div class="brow"><div class="nm"><b>'+esc(loc(b))+'</b><small>'+esc(secName(b.sec))+' · '+tr('cur')+'/'+tr('ton')+'</small></div>'+
+      '<span class="'+(up?'up':'down')+'">'+spark(v)+'</span><span class="pr">'+fmt(last)+'</span>'+
+      '<span class="pill '+(up?'up':'down')+'">'+(up?'▲':'▼')+' '+Math.abs(ch).toFixed(1)+'%</span></div>';
+  }).join('');
+  return '<div class="board"><div class="board-head"><h2>'+tr('board')+'</h2><span class="mono">'+tr('updated')+' '+hourLabel()+'</span></div>'+rows+'<p class="note">'+tr('boardNote')+'</p>'+waButton()+'</div>';
+}
+
+function hero(){
+  var st=S.hero?' style="background-image:linear-gradient(rgba(8,17,12,.82),rgba(8,17,12,.82)),url(\''+esc(S.hero)+'\')"':'';
+  var h1Txt=S.lang==='ar'?(S.h1Ar||DEF.h1Ar):(S.h1En||DEF.h1En);
+  var subTxt=S.lang==='ar'?(S.subAr||DEF.subAr):(S.subEn||DEF.subEn);
+  return '<section class="band hero"'+st+'><div class="wrap hero-in"><div><p class="eyebrow">'+esc(S.lang==='ar'?S.tagAr:S.tagEn)+'</p><h1>'+esc(h1Txt)+'</h1><p class="lead">'+esc(subTxt)+'</p>'+
+    '<div class="cta"><button class="btn btn-accent" data-a="scroll" data-id="simulator">'+tr('ctaSim')+'</button><button class="btn btn-ghost" data-a="scroll" data-id="sections">'+tr('cta1')+'</button></div>'+
+    '<div style="margin-top:20px">'+socialLinksHTML(S,true)+'</div></div>'+boardHTML()+'</div></section>';
+}
+
+function sectionsView(){
+  if(!U.sel||!S.sections.some(function(s){return s.id===U.sel;})){U.sel=S.sections[0]&&S.sections[0].id;}
+  var tabs=S.sections.map(function(s){return '<button data-a="tab" data-id="'+esc(s.id)+'" aria-pressed="'+(s.id===U.sel)+'">'+esc(loc(s))+'</button>';}).join('');
+  var list=S.products.filter(function(p){return p.sec===U.sel;});
+  var cards=list.map(function(p){
+    var selObj=S.sellers.filter(function(s){return s.name===p.seller;})[0];
+    var isRegSeller=selObj && sellerActive(selObj);
+    return '<article class="pcard">'+imgBox(p.img,p.id,true)+'<div class="pbody"><h3>'+esc(loc(p))+'</h3><div class="seller"><span>'+esc(p.seller)+'</span>'+(isRegSeller?'<span class="tag">✓ '+tr('verified')+'</span>':'')+'</div>'+
+      (selObj?socialLinksHTML(selObj,false):'')+
+      '<div class="price"><small>'+tr('from')+'</small> '+fmt(p.price)+' <small>'+tr('cur')+'</small></div>'+
+      '<div class="pact"><button class="btn btn-accent btn-sm" data-a="buy" data-id="'+esc(p.id)+'">'+tr('buy')+'</button><button class="btn btn-ghost btn-sm" data-a="chat" data-id="'+esc(p.id)+'">'+tr('chat')+'</button></div></div></article>';
+  }).join('');
+  return '<section class="sec" id="sections"><div class="wrap"><h2>'+tr('secTitle')+'</h2><div class="tabs" role="group">'+tabs+'</div>'+
+    (cards?'<div class="grid">'+cards+'</div>':'<div class="empty">'+tr('empty')+'</div>')+'</div></section>';
+}
+
+function sellersDirectoryView(){
+  var cards=S.sellers.map(function(s){
+    var ok=sellerActive(s);
+    return '<div class="pcard" style="padding:18px;gap:12px"><div style="display:flex;justify-content:space-between;align-items:center"><h3>🏢 '+esc(s.name)+'</h3><span class="status '+(ok?'up':'down')+'">'+(ok?tr('active'):tr('expired'))+'</span></div>'+
+      '<p style="font-size:13px;color:var(--muted)">الباقة: '+(s.plan==='yearly'?tr('planOpt_y'):tr('planOpt_m'))+'</p>'+
+      socialLinksHTML(s,false)+
+      '</div>';
+  }).join('');
+  return '<section class="sec alt" id="sellers-sec"><div class="wrap"><h2>🏢 '+tr('sellersTitle')+'</h2><div class="grid">'+cards+'</div></div></section>';
+}
+
+var STEP_LABELS={
+  1:'1. مرحلة الجرش (Hammer Mill)',
+  2:'2. مرحلة الخلط (Mixer)',
+  3:'3. مرحلة الكبس (Pellet Mill)',
+  4:'4. مرحلة التبريد (Cooler)',
+  5:'5. صوامع الفايبر جلاس والتعبئة'
+};
+
+function getSimLineCap(){
+  var caps=[];
+  for(var i=1;i<=4;i++){if(U.selectedLine[i]){caps.push(Number(U.selectedLine[i].cap));}}
+  return caps.length>=3?Math.min.apply(null,caps):0;
+}
+function getSimEquipCost(){
+  var c=0;
+  for(var i=1;i<=5;i++){if(U.selectedLine[i]){c+=Number(U.selectedLine[i].price);}}
+  return c;
+}
+function getSimEquipKw(){
+  var kw=0;
+  for(var i=1;i<=5;i++){if(U.selectedLine[i]){kw+=Number(U.selectedLine[i].kw);}}
+  return kw;
+}
+function getSimRawTonCost(){
+  var cost=0;
+  Object.keys(U.formulaMix).forEach(function(k){
+    var r=S.rawMaterials[k];
+    if(r){cost+=(Number(U.formulaMix[k])/1000)*Number(r.price);}
+  });
+  return Math.round(cost);
+}
+
+function simulatorSectionView(){
+  var eqCost=getSimEquipCost();
+  var remBudget=U.budgetTier - eqCost;
+  var lineCap=getSimLineCap();
+  var rawTonCost=getSimRawTonCost();
+
+  var nav='<div class="sim-nav">'+
+    '<button class="'+(U.simTab==='line'?'active':'')+'" data-sim="tab" data-v="line">1. عنبر المعدات (معاينة ثلاثية الأبعاد 3D)</button>'+
+    '<button class="'+(U.simTab==='lab'?'active':'')+'" data-sim="tab" data-v="lab">2. معمل الـ 30 تركيبة والجلوتين</button>'+
+    '<button class="'+(U.simTab==='roi'?'active':'')+'" data-sim="tab" data-v="roi">3. تشغيل المصنع والأرباح وطلب المقايسة</button>'+
+    '</div>';
+
+  var content='';
+  if(U.simTab==='line'){content=simLineBuilderHTML();}
+  else if(U.simTab==='lab'){content=simFormulaLabHTML();}
+  else{content=simRoiAndOrderHTML();}
+
+  return '<section class="sim-sec" id="simulator"><div class="wrap">'+
+    '<div class="sim-header-box">'+
+      '<div><span class="eyebrow">AL-ADHAM 3D FEED MILL SIMULATOR · MALADHAM.COM</span><h2>🏭 محاكي مصانع الأعلاف الثلاثي الأبعاد ومعمل الـ 30 تركيبة الاقتصادية</h2></div>'+
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;background:rgba(0,0,0,.35);padding:10px 16px;border-radius:10px;border:1px solid var(--band-line)">'+
+        '<div><small style="color:var(--band-muted);display:block;font-size:11px">الميزانية المتبقية</small><b style="color:'+(remBudget<0?'#FF8A78':'#E0A936')+'">'+fmt(remBudget)+' ج.م</b></div>'+
+        '<div><small style="color:var(--band-muted);display:block;font-size:11px">قدرة الخط</small><b style="color:#5BD08E">'+lineCap+' طن/ساعة</b></div>'+
+        '<div><small style="color:var(--band-muted);display:block;font-size:11px">تكلفة طن العلف</small><b style="color:#fff">'+fmt(rawTonCost)+' ج.م</b></div>'+
+      '</div>'+
+    '</div>'+
+    nav+content+'</div></section>';
+}
+
+function simLineBuilderHTML(){
+  var list=U.eqFilter==='all'?S.simEquipment:S.simEquipment.filter(function(e){return e.type===U.eqFilter;});
+  var catHTML=list.map(function(item){
+    var thumb=item.img?'<img src="'+esc(item.img)+'" alt="">':'<div style="font-size:22px">🏭</div>';
+    return '<div class="eq-item"><div class="eq-thumb">'+thumb+'</div><div style="flex:1">'+
+      '<div style="font-weight:700;font-size:14px">'+esc(item.name)+'</div>'+
+      '<div style="font-size:12px;color:var(--band-muted);margin:3px 0">قدرة: '+item.cap+' طن/س | موتور: '+item.kw+' KW | السعر: <b style="color:var(--accent)">'+fmt(item.price)+' ج.م</b></div>'+
+      '<button class="btn btn-accent btn-sm" data-sim="installEq" data-id="'+esc(item.id)+'">+ تركيب في المرحلة ('+item.step+')</button>'+
+      '</div></div>';
+  }).join('');
+
+  var slotsHTML='';
+  for(var step=1;step<=5;step++){
+    var eq=U.selectedLine[step];
+    if(eq){
+      var vis=eq.img?'<img src="'+esc(eq.img)+'" style="max-height:65px;border-radius:6px">':'<div style="font-size:28px">⚙️</div>';
+      slotsHTML+='<div class="sim-slot filled"><span class="sim-step-badge">'+step+'</span>'+
+        '<div style="font-size:12px;color:var(--accent);font-weight:600">'+STEP_LABELS[step]+'</div>'+
+        '<div style="margin:6px auto">'+vis+'</div>'+
+        '<div><div style="font-size:12px;font-weight:700">'+esc(eq.name)+'</div>'+
+        '<div style="font-size:11px;color:var(--band-muted)">'+eq.cap+' طن/س · '+eq.kw+' KW</div>'+
+        '<div style="font-size:12px;color:var(--band-up);font-weight:700;margin:3px 0">'+fmt(eq.price)+' ج.م</div>'+
+        '<button class="btn btn-ghost btn-sm danger" style="width:100%" data-sim="removeEq" data-step="'+step+'">إزالة</button></div></div>';
+    }else{
+      slotsHTML+='<div class="sim-slot"><span class="sim-step-badge">'+step+'</span>'+
+        '<div style="font-size:12px;color:var(--band-muted)">'+STEP_LABELS[step]+'</div>'+
+        '<div style="opacity:.25;margin:12px auto;font-size:28px">❌</div>'+
+        '<div style="font-size:12px;color:#FF8A78">غير مركب — اختر من الكتالوج</div></div>';
+    }
+  }
+
+  if(U.visualMode==='both' || U.visualMode==='3d'){
+    setTimeout(function(){ init3DCanvas('canvas3DContainer'); }, 50);
+  }
+
+  var showSchematic = (U.visualMode==='both' || U.visualMode==='2d') ? renderSchematicDiagramSVG() : '';
+  var show3D = (U.visualMode==='both' || U.visualMode==='3d') ? '<div class="canvas-3d-box" id="canvas3DContainer" title="اسحب بالماوس لتدوير المصنع 360 درجة"></div>' : '';
+
+  return '<div class="sim-grid-2">'+
+    '<div class="sim-card"><h3 style="margin-bottom:10px;color:var(--accent)">🛠️ كتالوج معدات شركة الأدهم الأصلي (maladham.com)</h3>'+
+      '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">'+
+        '<button class="chip" data-sim="filterEq" data-v="all">الكل</button>'+
+        '<button class="chip" data-sim="filterEq" data-v="grinder">1. مجارش</button>'+
+        '<button class="chip" data-sim="filterEq" data-v="mixer">2. خلاطات وتنسيب</button>'+
+        '<button class="chip" data-sim="filterEq" data-v="pellet">3. مكابس</button>'+
+        '<button class="chip" data-sim="filterEq" data-v="cooler">4. مبردات ومفتت</button>'+
+        '<button class="chip" data-sim="filterEq" data-v="silo">5. غرابيل وتعبئة</button>'+
+      '</div>'+
+      '<div style="max-height:540px;overflow-y:auto">'+catHTML+'</div>'+
+    '</div>'+
+    '<div class="sim-card">'+
+      '<div class="view-toggle-bar">'+
+        '<h3>🏗️ المخطط الهندسي وعنبر الإنتاج ('+esc(U.factoryName)+')</h3>'+
+        '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+          '<button class="chip '+(U.visualMode==='both'?'chip-solid':'')+'" data-sim="vmode" data-v="both">عرض المخطط + 3D معاً</button>'+
+          '<button class="chip '+(U.visualMode==='2d'?'chip-solid':'')+'" data-sim="vmode" data-v="2d">المخطط الهندسي المسمى</button>'+
+          '<button class="chip '+(U.visualMode==='3d'?'chip-solid':'')+'" data-sim="vmode" data-v="3d">المجسم 3D الحر</button>'+
+        '</div>'+
+      '</div>'+
+      showSchematic+
+      show3D+
+      '<div class="sim-slots">'+slotsHTML+'</div>'+
+      '<div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">'+
+        '<div>إجمالي المعدات: <b style="color:var(--accent)">'+fmt(getSimEquipCost())+' ج.م</b> | إجمالي القوة: <b style="color:var(--accent)">'+getSimEquipKw()+' KW</b></div>'+
+        '<button class="btn btn-accent" data-sim="tab" data-v="lab">انتقل لمعمل الـ 30 تركيبة ⬅️</button>'+
+      '</div>'+
+    '</div></div>';
+}
+
+function simFormulaLabHTML(){
+  var rawCards=Object.keys(S.rawMaterials).map(function(k){
+    var r=S.rawMaterials[k];
+    return '<div class="raw-card" data-sim="addRaw" data-k="'+k+'">'+
+      '<div class="raw-tex '+r.tex+'"></div>'+
+      '<div style="font-weight:700;font-size:12px">'+esc(r.name)+'</div>'+
+      '<div style="font-size:11px;color:var(--accent)">'+fmt(r.price)+' ج.م/طن</div>'+
+      '<div style="font-size:10px;color:var(--band-muted)">بروتين '+r.protein+'%</div></div>';
+  }).join('');
+
+  var catOpts='<option value="poultry"'+(U.formulaCat==='poultry'?' selected':'')+'>🐔 أعلاف الدواجن (10 تركيبات اقتصادية)</option>'+
+              '<option value="cattle"'+(U.formulaCat==='cattle'?' selected':'')+'>🐄 أعلاف المواشي والأبقار (10 تركيبات)</option>'+
+              '<option value="sheep"'+(U.formulaCat==='sheep'?' selected':'')+'>🐑 أعلاف الأغنام والماعز (10 تركيبات)</option>';
+
+  var recOpts=FORMULAS_DB[U.formulaCat].map(function(f,i){
+    return '<option value="'+i+'"'+(Number(U.formulaIdx)===i?' selected':'')+'>'+esc(f.name)+'</option>';
+  }).join('');
+
+  var totalW=0,totalCost=0,totalProt=0,totalEnergy=0;
+  var rowsHTML=Object.keys(U.formulaMix).map(function(k){
+    var qty=Number(U.formulaMix[k])||0;
+    var r=S.rawMaterials[k];
+    if(!r||qty<=0){return '';}
+    totalW+=qty;
+    var c=(qty/1000)*Number(r.price);
+    totalCost+=c;
+    totalProt+=(qty*Number(r.protein))/100;
+    totalEnergy+=(qty/1000)*Number(r.energy);
+    return '<tr>'+
+      '<td><span class="raw-tex '+r.tex+'" style="width:20px;height:20px;display:inline-block;vertical-align:middle;margin:0 0 0 6px"></span>'+esc(r.name)+'</td>'+
+      '<td>'+fmt(r.price)+' ج.م</td>'+
+      '<td><input type="number" class="sim-inp" style="width:85px;padding:4px 6px;text-align:center" value="'+qty+'" step="5" data-sim-qty="'+k+'"></td>'+
+      '<td>'+((qty/1000)*100).toFixed(1)+'%</td>'+
+      '<td style="color:var(--accent);font-weight:700">'+fmt(Math.round(c))+' ج.م</td></tr>';
+  }).join('');
+
+  var protPct=totalW>0?((totalProt/totalW)*100).toFixed(1):0;
+
+  return '<div class="sim-grid-2">'+
+    '<div class="sim-card"><h3 style="margin-bottom:8px;color:var(--accent)">🌾 مخزن الخامات الحقيقية (اضغط للإضافة)</h3>'+
+      '<div class="raw-grid">'+rawCards+'</div></div>'+
+    '<div class="sim-card">'+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px">'+
+        '<label class="fld"><span>1. اختر فئة العلف:</span><select class="sim-inp" data-sim-inp="formulaCat">'+catOpts+'</select></label>'+
+        '<label class="fld"><span>2. اختر من الـ 30 تركيبة الجاهزة:</span><select class="sim-inp" data-sim-inp="formulaIdx">'+recOpts+'</select></label>'+
+      '</div>'+
+      '<div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;background:rgba(0,0,0,.4);padding:12px;border-radius:10px;margin-bottom:12px">'+
+        '<div><small style="color:var(--band-muted);display:block;font-size:11px">إجمالي الوزن</small><b style="color:'+(totalW===1000?'#5BD08E':'#E0A936')+'">'+totalW+' كجم</b></div>'+
+        '<div><small style="color:var(--band-muted);display:block;font-size:11px">البروتين الخام</small><b>'+protPct+' %</b></div>'+
+        '<div><small style="color:var(--band-muted);display:block;font-size:11px">الطاقة الممثلة</small><b>'+Math.round(totalEnergy)+' Kcal</b></div>'+
+        '<div><small style="color:var(--band-muted);display:block;font-size:11px">تكلفة الطن (خامات)</small><b style="color:#5BD08E">'+fmt(Math.round(totalCost))+' ج.م</b></div>'+
+      '</div>'+
+      '<div style="max-height:320px;overflow-y:auto"><table class="sim-table"><thead><tr><th>الخامة</th><th>سعر الطن</th><th>الكمية (كجم)</th><th>النسبة</th><th>التكلفة</th></tr></thead><tbody>'+rowsHTML+'</tbody></table></div>'+
+      '<div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">'+
+        '<button class="btn btn-ghost btn-sm" data-sim="balance1000">⚖️ موازنة تلقائية إلى 1000 كجم</button>'+
+        '<button class="btn btn-accent" data-sim="tab" data-v="roi">تشغيل المصنع وحساب الأرباح ⬅️</button>'+
+      '</div></div></div>';
+}
+
+function simRoiAndOrderHTML(){
+  var cap=getSimLineCap();
+  var kw=getSimEquipKw();
+  var eqCost=getSimEquipCost();
+  var rawCost=getSimRawTonCost();
+  var elecTon=cap>0?Math.round((kw*Number(S.elecPriceKwh))/cap):0;
+  var laborTon=Number(S.laborAndBagsPerTon)||350;
+  var totalTonCost=rawCost+elecTon+laborTon;
+  var sellPrice=totalTonCost+Number(U.marginPerTon);
+  var dailyTons=cap*Number(U.hoursPerDay);
+  var dailyProfit=dailyTons*Number(U.marginPerTon);
+  var monthlyProfit=dailyProfit*Number(U.daysPerMonth);
+  var payback=monthlyProfit>0?(eqCost/monthlyProfit).toFixed(1):0;
+
+  var miniSlots='';
+  for(var s=1;s<=5;s++){
+    var eq=U.selectedLine[s];
+    miniSlots+='<div class="sim-slot '+(eq?'filled':'')+'" style="min-height:130px;padding:8px">'+
+      '<div style="font-size:11px;color:var(--accent)">'+STEP_LABELS[s]+'</div>'+
+      '<div style="margin:6px auto;font-size:24px">'+(eq?'⚙️':'❌')+'</div>'+
+      '<div style="font-size:11px">'+(eq?esc(eq.name):'غير مركب')+'</div></div>';
+  }
+
+  return '<div class="sim-card '+(U.simRunning?'running':'')+'">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px">'+
+      '<div><h3 style="color:var(--accent)">⚡ غرفة التشغيل الحية ودراسة الجدوى</h3><small style="color:var(--band-muted)">التركيبة قيد التشغيل: '+esc(U.formulaTitle)+'</small></div>'+
+      '<button class="btn '+(U.simRunning?'btn-ghost danger':'btn-accent')+'" data-sim="toggleRun">'+(U.simRunning?'⏸️ إيقاف خط الإنتاج':'▶️ تشغيل خط الإنتاج الآن')+'</button>'+
+    '</div>'+
+    '<div class="sim-slots">'+miniSlots+'</div>'+
+    '<div class="pipe-anim '+(U.simRunning?'run':'')+'"></div>'+
+    '<div class="grid" style="margin-top:20px">'+
+      '<div class="sim-card" style="margin:0"><h4 style="color:var(--accent);margin-bottom:10px">⚙️ إعدادات التشغيل</h4>'+
+        '<label class="fld"><span>اسم مصنعك في المقايسة:</span><input type="text" class="sim-inp" value="'+esc(U.factoryName)+'" data-sim-inp="factoryName"></label>'+
+        '<label class="fld" style="margin-top:8px"><span>ساعات التشغيل يومياً:</span><input type="number" class="sim-inp" value="'+U.hoursPerDay+'" data-sim-inp="hoursPerDay"></label>'+
+        '<label class="fld" style="margin-top:8px"><span>هامش الربح المطلوب في الطن (ج.م):</span><input type="number" class="sim-inp" value="'+U.marginPerTon+'" step="100" data-sim-inp="marginPerTon"></label>'+
+      '</div>'+
+      '<div class="sim-card" style="margin:0"><h4 style="color:var(--accent);margin-bottom:10px">📊 تكلفة إنتاج الطن الواحد</h4>'+
+        '<p style="display:flex;justify-content:space-between;margin-bottom:8px"><span>تكلفة الخامات:</span><b>'+fmt(rawCost)+' ج.م</b></p>'+
+        '<p style="display:flex;justify-content:space-between;margin-bottom:8px"><span>كهرباء للطن:</span><b>'+fmt(elecTon)+' ج.م</b></p>'+
+        '<p style="display:flex;justify-content:space-between;margin-bottom:8px"><span>عمالة وشكائر للطن:</span><b>'+fmt(laborTon)+' ج.م</b></p>'+
+        '<hr style="border-color:var(--band-line);margin:10px 0">'+
+        '<p style="display:flex;justify-content:space-between;font-size:17px"><span>التكلفة النهائية للطن:</span><b style="color:var(--accent)">'+fmt(totalTonCost)+' ج.م</b></p>'+
+        '<p style="display:flex;justify-content:space-between;font-size:17px;margin-top:6px"><span>سعر البيع المقترح:</span><b style="color:var(--band-up)">'+fmt(sellPrice)+' ج.م</b></p>'+
+      '</div>'+
+      '<div class="sim-card" style="margin:0"><h4 style="color:var(--band-up);margin-bottom:10px">💰 صافي الأرباح وطلب الخط</h4>'+
+        '<p style="display:flex;justify-content:space-between;margin-bottom:8px"><span>الإنتاج اليومي:</span><b>'+dailyTons.toFixed(1)+' طن/يوم</b></p>'+
+        '<p style="display:flex;justify-content:space-between;margin-bottom:8px"><span>صافي الربح اليومي:</span><b style="color:var(--band-up)">'+fmt(Math.round(dailyProfit))+' ج.م</b></p>'+
+        '<p style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:18px"><span>صافي الربح الشهري:</span><b style="color:var(--accent)">'+fmt(Math.round(monthlyProfit))+' ج.م</b></p>'+
+        '<p style="display:flex;justify-content:space-between;margin-bottom:14px"><span>استرداد رأس مال المعدات:</span><b>'+payback+' شهر</b></p>'+
+        '<button class="btn btn-accent" style="width:100%" data-sim="orderWa">📲 إرسال مقايسة المصنع عبر واتساب للتنفيذ</button>'+
+      '</div>'+
+    '</div></div>';
+}
+
+function escrowView(){
+  var stepsList=S.escrowSteps||DEF.escrowSteps;
+  var items=stepsList.map(function(st,idx){
+    var n=idx+1;
+    var title=S.lang==='ar'?st.tAr:st.tEn;
+    var desc=S.lang==='ar'?st.dAr:st.dEn;
+    return '<li><span class="n">'+n+' / '+stepsList.length+'</span><h3>'+esc(title)+'</h3><p>'+esc(desc)+'</p></li>';
+  }).join('');
+  return '<section class="sec" id="escrow"><div class="wrap"><h2>'+tr('escTitle')+'</h2><ol class="steps">'+items+'</ol></div></section>';
+}
+
+function plansView(){
+  var saveAmt=S.monthly*12-S.yearly;
+  var feats='<ul><li>'+tr('f1')+'</li><li>'+tr('f2')+'</li><li>'+tr('f3')+'</li><li>'+tr('f4')+'</li></ul>';
+  return '<section class="sec alt" id="plans"><div class="wrap"><h2>'+tr('plansTitle')+'</h2><div class="plans">'+
+    '<div class="plan"><h3>'+tr('monthly')+'</h3><div class="amt">'+fmt(S.monthly)+' <small>'+tr('cur')+' '+tr('perMonth')+'</small></div>'+feats+'</div>'+
+    '<div class="plan feat"><h3>'+tr('yearly')+'</h3><div class="amt">'+fmt(S.yearly)+' <small>'+tr('cur')+' '+tr('perYear')+'</small></div>'+(saveAmt>0?'<p class="save">'+tr('save')+' '+fmt(saveAmt)+' '+tr('cur')+'</p>':'')+feats+'</div></div>'+
+    '<div class="pnote"><p>'+tr('commission')+': <b class="mono">'+esc(S.commission)+'%</b></p><p>'+tr('plansNote')+'</p></div></div></section>';
+}
+
+function footer(){
+  var nm=S.lang==='ar'?(S.siteNameAr||S.siteName):S.siteName;
+  var fTxt=S.lang==='ar'?(S.footAr||DEF.footAr):(S.footEn||DEF.footEn);
+  return '<footer class="foot"><div class="wrap"><div><strong>'+esc(nm)+' © '+new Date().getFullYear()+'</strong><p>'+esc(fTxt)+'</p></div>'+socialLinksHTML(S,false)+'</div></footer>';
+}
+
+function homeView(){
+  return hero()+simulatorSectionView()+sectionsView()+sellersDirectoryView()+escrowView()+plansView()+footer();
+}
+
+function loginGateView(){
+  return '<div class="login-wrap"><form class="login-card" id="loginForm"><div style="font-size:32px">🔒</div><h2>'+tr('loginTitle')+'</h2><p class="hint">'+tr('loginSub')+'</p>'+
+    '<label class="fld"><span>Password / كلمة المرور</span><input type="password" id="adminPassInput" placeholder="'+tr('passPh')+'" required autofocus></label>'+
+    '<button type="submit" class="btn btn-accent">'+tr('loginBtn')+'</button>'+
+    '<button type="button" class="btn btn-ghost btn-sm" data-a="home">'+tr('back')+'</button></form></div>';
+}
+
+function statusBadgeHTML(){
+  return '<span class="save-badge'+(U.dirty?' unsaved':'')+'">'+(U.dirty?tr('unsavedBadge'):tr('savedBadge'))+'</span>';
+}
+
+function fld(label,path,val,t,phText){
+  return '<label class="fld"><span>'+label+'</span><input '+(t==='num'?'type="number" min="0" step="any" data-t="num"':'type="text"')+' value="'+esc(val)+'" '+(phText?'placeholder="'+esc(phText)+'"':'')+' data-p="'+path+'"></label>';
+}
+function selSec(label,path,val){
+  return '<label class="fld"><span>'+label+'</span><select data-p="'+path+'" data-r="1">'+D.sections.map(function(s){return '<option value="'+esc(s.id)+'"'+(s.id===val?' selected':'')+'>'+esc(loc(s))+'</option>';}).join('')+'</select></label>';
+}
+function selSeller(label,path,val,idx){
+  var datalistId='sellers-dl-'+idx;
+  var opts=D.sellers.map(function(s){return '<option value="'+esc(s.name)+'">';}).join('');
+  return '<label class="fld"><span>'+label+'</span><input type="text" list="'+datalistId+'" value="'+esc(val)+'" data-p="'+path+'"><datalist id="'+datalistId+'">'+opts+'</datalist></label>';
+}
+function imgCtl(path,cur,max,mime,seed,wide){
+  return '<div class="imgctl'+(wide?' wide':'')+'">'+imgBox(cur,seed,false)+'<div class="imgbtns"><label class="btn btn-ghost">'+tr('upload')+'<input class="vh" type="file" accept="image/*" data-p="'+path+'" data-max="'+max+'" data-mime="'+mime+'"></label>'+(cur?'<button class="btn btn-ghost danger" data-a="rmImg" data-p="'+path+'">'+tr('remove')+'</button>':'')+'</div></div>';
+}
+
+function adminSite(){
+  var stepsHTML=(D.escrowSteps||DEF.escrowSteps).map(function(st,i){
+    return '<div class="rowline">'+
+      fld((i+1)+'. '+tr('stepTitleAr'),'escrowSteps.'+i+'.tAr',st.tAr)+
+      fld(tr('stepDescAr'),'escrowSteps.'+i+'.dAr',st.dAr)+
+      '</div>';
+  }).join('');
+
+  return '<div class="panel-head"><h2>'+tr('a_site')+'</h2>'+statusBadgeHTML()+'</div><p class="hint">'+tr('siteHint')+'</p>'+
+    '<div class="fields">'+
+      fld(tr('siteNameAr'),'siteNameAr',D.siteNameAr)+
+      fld(tr('siteName'),'siteName',D.siteName)+
+      fld(tr('tagAr'),'tagAr',D.tagAr)+
+      fld(tr('tagEn'),'tagEn',D.tagEn)+
+      fld(tr('h1ArLabel'),'h1Ar',D.h1Ar)+
+      fld(tr('subArLabel'),'subAr',D.subAr)+
+      fld(tr('footArLabel'),'footAr',D.footAr)+
+      '<label class="fld"><span>'+tr('defLang')+'</span><select data-p="lang" data-r="1"><option value="ar"'+(D.lang==='ar'?' selected':'')+'>العربية</option><option value="en"'+(D.lang==='en'?' selected':'')+'>English</option></select></label>'+
+    '</div>'+
+    '<div class="subsec-title">روابط السوشيال ميديا والتواصل الخاصة بالمنصة نفسها</div>'+
+    '<div class="fields">'+
+      fld(tr('wa'),'whatsapp',D.whatsapp,'text',tr('waHint'))+
+      fld('📘 '+tr('fbLabel'),'fbUrl',D.fbUrl,'text','https://facebook.com/...')+
+      fld('▶️ '+tr('ytLabel'),'ytUrl',D.ytUrl,'text','https://youtube.com/...')+
+      fld('🎵 '+tr('ttLabel'),'ttUrl',D.ttUrl,'text','https://tiktok.com/@...')+
+      fld('🌐 '+tr('webLabel'),'webUrl',D.webUrl,'text','https://maladham.com/')+
+    '</div>'+
+    '<div class="fields"><div class="fld"><span>'+tr('logo')+'</span>'+imgCtl('logo',D.logo,400,'image/png','logo',true)+'</div><div class="fld"><span>'+tr('heroImg')+'</span>'+imgCtl('hero',D.hero,1600,'image/jpeg','hero',true)+'</div></div>'+
+    '<div class="subsec-title">'+tr('escrowEditTitle')+'</div>'+stepsHTML;
+}
+
+function adminSections(){
+  var rows=D.sections.map(function(s,i){
+    return '<div class="rowline">'+fld(tr('nameAr'),'sections.'+i+'.ar',s.ar)+fld(tr('nameEn'),'sections.'+i+'.en',s.en)+'<button class="btn btn-ghost danger" data-a="delSec" data-i="'+i+'">'+tr('del')+'</button></div>';
+  }).join('');
+  return '<div class="panel-head"><h2>'+tr('a_sections')+'</h2>'+statusBadgeHTML()+'</div>'+rows+'<div class="bar"><button class="btn btn-ghost" data-a="addSec">'+tr('add')+'</button></div>';
+}
+
+function adminProducts(){
+  var rows=D.products.map(function(p,i){
+    return '<div class="prow">'+imgCtl('products.'+i+'.img',p.img,1200,'image/jpeg',p.id)+'<div class="pf">'+
+      fld(tr('nameAr'),'products.'+i+'.ar',p.ar)+
+      fld(tr('nameEn'),'products.'+i+'.en',p.en)+
+      selSeller(tr('seller'),'products.'+i+'.seller',p.seller,i)+
+      fld(tr('price'),'products.'+i+'.price',p.price,'num')+
+      selSec(tr('section'),'products.'+i+'.sec',p.sec)+
+      '</div><button class="btn btn-ghost danger" data-a="delProd" data-i="'+i+'">'+tr('del')+'</button></div>';
+  }).join('');
+  return '<div class="panel-head"><h2>'+tr('a_products')+'</h2>'+statusBadgeHTML()+'</div>'+rows+'<div class="bar"><button class="btn btn-ghost" data-a="addProd">'+tr('add')+'</button></div>';
+}
+
+function adminPrices(){
+  var rows=D.board.map(function(b,i){
+    return '<div class="rowline">'+fld(tr('nameAr'),'board.'+i+'.ar',b.ar)+fld(tr('nameEn'),'board.'+i+'.en',b.en)+selSec(tr('section'),'board.'+i+'.sec',b.sec)+fld(tr('base'),'board.'+i+'.base',b.base,'num')+'<button class="btn btn-ghost danger" data-a="delPrice" data-i="'+i+'">'+tr('del')+'</button></div>';
+  }).join('');
+  return '<div class="panel-head"><h2>'+tr('a_prices')+'</h2>'+statusBadgeHTML()+'</div><p class="hint">'+tr('prHint')+'</p>'+rows+'<div class="bar"><button class="btn btn-ghost" data-a="addPrice">'+tr('add')+'</button></div>';
+}
+
+function adminPlans(){
+  var rows=D.sellers.map(function(s,i){
+    var ok=sellerActive(s);
+    return '<div class="seller-admin-card">'+
+      '<div class="rowline" style="border:0;padding:0">'+
+        fld(tr('sellerName'),'sellers.'+i+'.name',s.name)+
+        '<label class="fld"><span>'+tr('plan')+'</span><select data-p="sellers.'+i+'.plan" data-r="1"><option value="monthly"'+(s.plan==='monthly'?' selected':'')+'>'+tr('planOpt_m')+'</option><option value="yearly"'+(s.plan==='yearly'?' selected':'')+'>'+tr('planOpt_y')+'</option></select></label>'+
+        '<label class="fld"><span>'+tr('start')+'</span><input type="date" value="'+esc(s.start)+'" data-p="sellers.'+i+'.start" data-r="1"></label>'+
+        '<span class="status '+(ok?'up':'down')+'">'+(ok?tr('active'):tr('expired'))+'</span>'+
+        '<button class="btn btn-ghost danger" data-a="delSeller" data-i="'+i+'">'+tr('del')+'</button>'+
+      '</div>'+
+      '<div class="fields">'+
+        fld('📘 رابط فيسبوك الشركة','sellers.'+i+'.fb',s.fb||'','text','https://facebook.com/...')+
+        fld('▶️ رابط يوتيوب الشركة','sellers.'+i+'.yt',s.yt||'','text','https://youtube.com/...')+
+        fld('🎵 رابط تيك توك الشركة','sellers.'+i+'.tt',s.tt||'','text','https://tiktok.com/@...')+
+        fld('🌐 الموقع الإلكتروني للشركة','sellers.'+i+'.web',s.web||'','text','https://...')+
+      '</div>'+
+    '</div>';
+  }).join('');
+  return '<div class="panel-head"><h2>'+tr('a_plans')+'</h2>'+statusBadgeHTML()+'</div><div class="fields">'+fld(tr('mPrice'),'monthly',D.monthly,'num')+fld(tr('yPrice'),'yearly',D.yearly,'num')+fld(tr('comm'),'commission',D.commission,'num')+'</div>'+
+    '<div class="subsec-title">'+tr('sellersTitle')+'</div>'+rows+'<div class="bar"><button class="btn btn-ghost" data-a="addSeller">'+tr('add')+'</button></div>';
+}
+
+function adminSimConfig(){
+  var rawRows=Object.keys(D.rawMaterials).map(function(k){
+    var r=D.rawMaterials[k];
+    return fld(r.name+' (ج.م/طن)','rawMaterials.'+k+'.price',r.price,'num');
+  }).join('');
+
+  var eqRows=D.simEquipment.map(function(eq,idx){
+    return '<div class="rowline">'+
+      fld('اسم المعدة','simEquipment.'+idx+'.name',eq.name)+
+      fld('القدرة (طن/س)','simEquipment.'+idx+'.cap',eq.cap,'num')+
+      fld('الموتور (KW)','simEquipment.'+idx+'.kw',eq.kw,'num')+
+      fld('السعر (ج.م)','simEquipment.'+idx+'.price',eq.price,'num')+
+      fld('رابط صورة المعدة الحقيقية','simEquipment.'+idx+'.img',eq.img||'','text','https://maladham.com/...')+
+    '</div>';
+  }).join('');
+
+  return '<div class="panel-head"><h2>'+tr('a_sim')+'</h2>'+statusBadgeHTML()+'</div>'+
+    '<div class="fields">'+
+      fld('سعر كيلو الكهرباء في المحاكي (ج.م)','elecPriceKwh',D.elecPriceKwh,'num')+
+      fld('تكلفة العمالة والشكائر للطن (ج.م)','laborAndBagsPerTon',D.laborAndBagsPerTon,'num')+
+      fld('نص الشريط السفلي تحت المخطط الهندسي للمصنع','schematicFooter',D.schematicFooter||DEF.schematicFooter)+
+    '</div>'+
+    '<div class="subsec-title">بورصة أسعار خامات الأعلاف (تُحدّث الـ 30 تركيبة فوراً عند الحفظ)</div>'+
+    '<div class="fields">'+rawRows+'</div>'+
+    '<div class="subsec-title">معدات ومحاكاة مصنع الأعلاف ثلاثي الأبعاد (إضافة صورك الخاصة)</div>'+eqRows;
+}
+
+function adminSecurity(){
+  return '<div class="panel-head"><h2>'+tr('a_sec')+'</h2>'+statusBadgeHTML()+'</div>'+
+    '<div class="fields">'+
+      '<label class="fld"><span>'+tr('newPass')+'</span><input type="text" id="newAdminPassInp" data-p="adminPass" value="'+esc(D.adminPass||'hanfe@@2027')+'"></label>'+
+    '</div>'+
+    '<div class="subsec-title">📱 تثبيت المنصة كتطبيق موبايل وتحويلها لملف APK (أندرويد)</div>'+
+    '<div style="background:var(--bg);padding:16px;border-radius:12px;border:1px solid var(--line);font-size:14px;display:flex;flex-direction:column;gap:8px">'+
+      '<p><b>1. التثبيت المباشر على الموبايل الآن (PWA):</b> افتح هذا الملف في متصفح الموبايل (Chrome) واضغط على القائمة ⋮ ثم اختر <b>"إضافة إلى الشاشة الرئيسية / Install App"</b> ليظهر بأيقونة مستقلة باسم منصتك.</p>'+
+      '<p><b>2. استخراج ملف APK رسمي للأندرويد في دقيقة واحدة:</b> بعد حفظ تعديلاتك، ارفع ملف الـ HTML على استضافة موقعك (مثل <code>maladham.com</code>) ثم ضع الرابط في موقع <b>PWABuilder.com</b> أو <b>WebIntoApp.com</b> لتحميل ملف <code>.apk</code> جاهز للنشر والإرسال للعملاء.</p>'+
+    '</div>'+
+    '<div class="subsec-title">النسخ الاحتياطي ونقل الإعدادات (Backup & Restore)</div>'+
+    '<div class="bar">'+
+      '<button class="btn btn-brand" data-a="exportJSON">📥 '+tr('exportBtn')+'</button>'+
+      '<label class="btn btn-ghost">📤 '+tr('importBtn')+'<input class="vh" type="file" accept=".json,application/json" id="importJsonInput"></label>'+
+    '</div>';
+}
+
+function adminView(){
+  if(!U.unlocked){return loginGateView();}
+  var tabs=[
+    ['site','a_site','🌐'],
+    ['plans','a_plans',D.sellers.length],
+    ['sections','a_sections',D.sections.length],
+    ['products','a_products',D.products.length],
+    ['prices','a_prices',D.board.length],
+    ['sim','a_sim','🏭 3D'],
+    ['sec','a_sec','🔒']
+  ];
+  var nav=tabs.map(function(t){
+    return '<button data-a="atab" data-id="'+t[0]+'" aria-pressed="'+(U.atab===t[0])+'"><span>'+tr(t[1])+'</span><span class="count">'+t[2]+'</span></button>';
+  }).join('');
+  var body={site:adminSite,sections:adminSections,products:adminProducts,prices:adminPrices,plans:adminPlans,sim:adminSimConfig,sec:adminSecurity}[U.atab]();
+  var masterSaveBar='<div class="master-save-bar">'+
+    '<div><strong style="display:block;font-size:15px">لوحة ضبط منصة '+esc(D.siteNameAr||D.siteName)+'</strong><small style="color:var(--band-muted)">عدّل أي بيانات في أي قسم ثم اضغط على زر الحفظ الموحد لتطبيقها في كل الصفحات</small></div>'+
+    '<button type="button" class="btn-save-master" data-a="masterSave">'+tr('masterSaveBtn')+'</button>'+
+  '</div>';
+  return '<div class="wrap admin"><nav class="anav">'+nav+'</nav><div class="panel">'+body+masterSaveBar+'<hr style="border:0;border-top:1px solid var(--line);margin:8px 0"><div class="bar" style="justify-content:space-between"><button class="btn btn-ghost btn-sm" data-a="home">'+tr('back')+'</button><button class="btn btn-ghost danger btn-sm" data-a="reset">'+(U.resetAsk?tr('resetSure'):tr('reset'))+'</button></div></div></div>';
+}
+
+var chatIcon='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg>';
+function seedMsgs(){U.msgs=[{from:'s',key:'chatSeed'}];}
+function renderChat(){
+  var c=document.getElementById('chat');
+  if(!U.chat.open){c.innerHTML='<button class="fab" data-c="open" aria-label="'+tr('chatOpen')+'">'+chatIcon+'<span>'+tr('chat')+'</span></button>';return;}
+  var p=S.products.filter(function(x){return x.id===U.chat.withId;})[0]||S.products[0];
+  var who=p?(p.seller+' — '+loc(p)):(S.siteNameAr||S.siteName);
+  var msgs=U.msgs.map(function(m){return '<div class="msg '+(m.from==='me'?'me':'s')+'">'+esc(m.key?tr(m.key):m.txt)+'</div>';}).join('');
+  c.innerHTML='<section class="cpanel" aria-label="'+tr('chat')+'"><div class="chead"><div><strong>'+esc(who)+'</strong><small>'+tr('chatDemo')+'</small></div><button class="x" data-c="close" aria-label="'+tr('chatClose')+'">×</button></div>'+
+    '<div class="cmsgs" id="cmsgs">'+msgs+'</div><div class="cform"><input id="cin" type="text" autocomplete="off" enterkeyhint="send" placeholder="'+tr('chatPh')+'"><button class="btn btn-accent btn-sm" type="button" data-c="send">'+tr('send')+'</button></div></section>';
+  var l=document.getElementById('cmsgs');if(l){l.scrollTop=l.scrollHeight;}
+}
+
+var app=document.getElementById('app');
+function render(){
+  document.documentElement.lang=S.lang;
+  document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';
+  syncHeaderDOM();
+  app.innerHTML=header()+(U.view==='admin'?adminView():homeView());
+  renderChat();
+}
+
+function goHome(then){
+  U.view='home';
+  render();
+  if(then){then();}else{window.scrollTo(0,0);}
+}
+
+app.addEventListener('submit',function(e){
+  if(e.target && e.target.id==='loginForm'){
+    e.preventDefault();
+    var inp=document.getElementById('adminPassInput');
+    var entered=(inp&&inp.value)||'';
+    if(entered===(S.adminPass||'hanfe@@2027')){
+      U.unlocked=true;
+      D=clone(S);
+      U.dirty=false;
+      sessionStorage.setItem(AUTH_KEY,'1');
+      render();
+    }else{
+      toast(tr('wrongPass'));
+      if(inp){inp.value='';inp.focus();}
+    }
+  }
+});
+
+app.addEventListener('click',function(e){
+  var simBtn=e.target.closest('[data-sim]');
+  if(simBtn){
+    var act=simBtn.dataset.sim;
+    if(act==='tab'){U.simTab=simBtn.dataset.v;render();}
+    else if(act==='vmode'){U.visualMode=simBtn.dataset.v;render();}
+    else if(act==='filterEq'){U.eqFilter=simBtn.dataset.v;render();}
+    else if(act==='installEq'){
+      var eq=S.simEquipment.find(function(x){return x.id===simBtn.dataset.id;});
+      if(eq){U.selectedLine[eq.step]=eq;render();}
+    }
+    else if(act==='removeEq'){U.selectedLine[simBtn.dataset.step]=null;render();}
+    else if(act==='addRaw'){
+      var k=simBtn.dataset.k;
+      U.formulaMix[k]=(Number(U.formulaMix[k])||0)+25;
+      render();
+    }
+    else if(act==='balance1000'){
+      var tot=0;
+      Object.values(U.formulaMix).forEach(function(v){tot+=Number(v)||0;});
+      if(tot>0){
+        var diff=1000-tot;
+        U.formulaMix.corn=Math.max(0,(Number(U.formulaMix.corn)||0)+diff);
+        render();
+      }
+    }
+    else if(act==='toggleRun'){U.simRunning=!U.simRunning;render();}
+    else if(act==='orderWa'){
+      var lines=[];
+      for(var s=1;s<=5;s++){if(U.selectedLine[s]){lines.push('- '+U.selectedLine[s].name);}}
+      var msg='مرحباً فريق '+(S.siteNameAr||S.siteName)+',\nقمت بتصميم مصنعي ('+U.factoryName+') عبر محاكي مصانع الأعلاف الثلاثي الأبعاد:\n'+lines.join('\n')+'\nالقدرة: '+getSimLineCap()+' طن/ساعة\nالتركيبة: '+U.formulaTitle;
+      var phNum=String(S.whatsapp||'201000000000').replace(/\D/g,'');
+      window.open('https://wa.me/'+phNum+'?text='+encodeURIComponent(msg),'_blank');
+    }
+    return;
+  }
+
+  var el=e.target.closest('[data-a]');if(!el){return;}
+  var a=el.dataset.a,i=parseInt(el.dataset.i,10),id=el.dataset.id;
+  if(a!=='reset'&&U.resetAsk){U.resetAsk=false;}
+  if(a==='home'){goHome();}
+  else if(a==='admin'){
+    if(U.view!=='admin'){D=clone(S);U.dirty=false;}
+    U.view=U.view==='admin'?'home':'admin';
+    render();window.scrollTo(0,0);
+  }
+  else if(a==='masterSave'){
+    saveAllAdminChanges();
+  }
+  else if(a==='logout'){
+    U.unlocked=false;
+    sessionStorage.removeItem(AUTH_KEY);
+    goHome();
+  }
+  else if(a==='exportJSON'){
+    var blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var link=document.createElement('a');
+    link.href=url;
+    link.download=(S.siteName||'ardeva')+'-3d-backup.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+  else if(a==='lang'){S.lang=S.lang==='ar'?'en':'ar';D.lang=S.lang;save();render();}
+  else if(a==='scroll'){var go=function(){var t=document.getElementById(id);if(t){t.scrollIntoView({behavior:'smooth',block:'start'});}};if(U.view!=='home'){goHome(function(){setTimeout(go,30);});}else{go();}}
+  else if(a==='tab'){U.sel=id;render();}
+  else if(a==='buy'){toast(tr('payDemo'));}
+  else if(a==='chat'){if(U.chat.withId!==id||!U.msgs.length){seedMsgs();}U.chat={open:true,withId:id};renderChat();}
+  else if(a==='waSetup'){toast(tr('waNeed'));D=clone(S);U.dirty=false;U.view='admin';U.atab='site';render();window.scrollTo(0,0);}
+  else if(a==='atab'){U.atab=id;render();}
+  else if(a==='rmImg'){setPath(D,el.dataset.p,null);markDirty();render();}
+  else if(a==='addSec'){D.sections.push({id:uid(),ar:'قسم جديد',en:'New section'});markDirty();render();}
+  else if(a==='delSec'){
+    var sid=D.sections[i].id;
+    if(D.sections.length<2){toast(tr('lastSec'));}
+    else if(D.products.some(function(p){return p.sec===sid;})||D.board.some(function(b){return b.sec===sid;})){toast(tr('secBusy'));}
+    else{D.sections.splice(i,1);markDirty();render();}
+  }
+  else if(a==='addProd'){
+    var defaultSeller=(D.sellers[0]&&D.sellers[0].name)||'';
+    D.products.push({id:uid(),sec:D.sections[0].id,ar:'منتج جديد',en:'New product',seller:defaultSeller,price:1000,img:null});
+    markDirty();render();
+  }
+  else if(a==='delProd'){D.products.splice(i,1);markDirty();render();}
+  else if(a==='addPrice'){D.board.push({id:uid(),sec:D.sections[0].id,ar:'صنف جديد',en:'New item',base:10000});markDirty();render();}
+  else if(a==='delPrice'){D.board.splice(i,1);markDirty();render();}
+  else if(a==='addSeller'){D.sellers.push({id:uid(),name:'شركة جديدة',plan:'yearly',start:new Date().toISOString().slice(0,10),fb:'',yt:'',tt:'',web:''});markDirty();render();}
+  else if(a==='delSeller'){D.sellers.splice(i,1);markDirty();render();}
+  else if(a==='reset'){
+    if(!U.resetAsk){U.resetAsk=true;render();}
+    else{
+      var keepPass=S.adminPass;
+      try{localStorage.removeItem(LS);}catch(x){}
+      S=clone(DEF);
+      S.adminPass=keepPass;
+      D=clone(S);
+      U.dirty=false;
+      save();
+      U.resetAsk=false;U.sel=null;render();toast('✓');
+    }
+  }
+});
+
+app.addEventListener('input',function(e){
+  var el=e.target;
+  if(el.dataset.simQty){
+    var k=el.dataset.simQty;
+    var val=Math.max(0,parseFloat(el.value)||0);
+    if(val===0){delete U.formulaMix[k];}else{U.formulaMix[k]=val;}
+    render();
+    return;
+  }
+  if(el.dataset.simInp && el.tagName!=='SELECT'){
+    var prop=el.dataset.simInp;
+    U[prop]=el.type==='number'?(parseFloat(el.value)||0):el.value;
+    render();
+    return;
+  }
+  var p=el.dataset.p;
+  if(!p || el.type==='file' || el.tagName==='SELECT' || el.type==='date'){return;}
+  var v=el.value;
+  if(el.dataset.t==='num'){v=Math.max(0,parseFloat(v)||0);}
+  setPath(D,p,v);
+  markDirty();
+});
+
+app.addEventListener('change',function(e){
+  var el=e.target;
+  if(el.dataset.simInp && el.tagName==='SELECT'){
+    var sp=el.dataset.simInp;
+    if(sp==='budgetTier'){U.budgetTier=Number(el.value);}
+    else if(sp==='formulaCat'){loadSimFormula(el.value,0);}
+    else if(sp==='formulaIdx'){loadSimFormula(U.formulaCat,Number(el.value));}
+    render();
+    return;
+  }
+  if(el.id==='importJsonInput'){
+    var f=el.files&&el.files[0];if(!f){return;}
+    var fr=new FileReader();
+    fr.onload=function(){
+      try{
+        var imported=JSON.parse(fr.result);
+        D=Object.assign(clone(DEF),imported);
+        saveAllAdminChanges();
+        toast(tr('importOk'));
+      }catch(err){toast('ملف غير صالح');}
+    };
+    fr.readAsText(f);
+    return;
+  }
+  var p=el.dataset.p;if(!p){return;}
+  if(el.type==='file'){
+    var file=el.files&&el.files[0];if(!file){return;}
+    readImg(file,parseInt(el.dataset.max,10)||1200,el.dataset.mime||'image/jpeg',function(url){setPath(D,p,url);markDirty();render();});
+    return;
+  }
+  var v=el.value;
+  if(el.dataset.t==='num'){v=Math.max(0,parseFloat(v)||0);}
+  setPath(D,p,v);
+  markDirty();
+  if(el.dataset.r){render();}
+});
+
+var chatBox=document.getElementById('chat');
+chatBox.addEventListener('click',function(e){
+  var el=e.target.closest('[data-c]');if(!el){return;}
+  if(el.dataset.c==='open'){U.chat.open=true;if(!U.msgs.length){seedMsgs();}renderChat();}
+  else if(el.dataset.c==='close'){U.chat.open=false;renderChat();}
+  else if(el.dataset.c==='send'){sendMsg();}
+});
+function addMsg(m){
+  U.msgs.push(m);
+  var l=document.getElementById('cmsgs');if(!l){return;}
+  var d=document.createElement('div');d.className='msg '+(m.from==='me'?'me':'s');d.textContent=m.key?tr(m.key):m.txt;
+  l.appendChild(d);l.scrollTop=l.scrollHeight;
+}
+function botKey(t){
+  t=t.toLowerCase();
+  if(/سعر|بكام|كام|price|cost/.test(t)){return 'r_price';}
+  if(/توصيل|تسليم|شحن|تركيب|ship/.test(t)){return 'r_ship';}
+  if(/متاح|موجود|stock/.test(t)){return 'r_stock';}
+  if(/ضمان|دفع|escrow|pay/.test(t)){return 'r_pay';}
+  return 'chatReply';
+}
+function sendMsg(){
+  var inp=document.getElementById('cin');if(!inp){return;}
+  var v=inp.value.trim();if(!v){return;}
+  inp.value='';addMsg({from:'me',txt:v});inp.focus();
+  var k=botKey(v);
+  setTimeout(function(){if(U.chat.open){addMsg({from:'s',key:k});}else{U.msgs.push({from:'s',key:k});}},650);
+}
+chatBox.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target&&e.target.id==='cin'&&!e.isComposing){e.preventDefault();sendMsg();}
+});
+
+render();
+})();
+</script>
+</body>
+</html>
